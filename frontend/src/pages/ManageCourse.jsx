@@ -9,9 +9,9 @@ import EditLessonForm from '@/components/instructor/EditLessonForm';
 import AddSectionForm from '@/components/instructor/AddSectionForm';
 import EditSectionForm from '@/components/instructor/EditSectionForm';
 import AddLiveClassForm from '@/components/instructor/AddLiveClassForm';
-import AddQuizForm from '@/components/instructor/AddQuizForm';
 import EditQuizForm from '@/components/instructor/EditQuizForm';
 import LessonsList from '@/components/instructor/LessonsList';
+import EditCourseDetailsModal from '@/components/instructor/EditCourseDetailsModal';
 import { Plus, ArrowLeft, FolderPlus, Video, HelpCircle, Trash2, Edit, Image as ImageIcon, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -44,6 +44,7 @@ export default function ManageCourse({ user, logout }) {
   const [editingLesson, setEditingLesson] = useState(null);
   const [editingSection, setEditingSection] = useState(null);
   const [editingQuiz, setEditingQuiz] = useState(null);
+  const [showEditDetails, setShowEditDetails] = useState(false);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
   const navigate = useNavigate();
@@ -541,7 +542,18 @@ export default function ManageCourse({ user, logout }) {
               </div>
 
               <div className="detail-card">
-                <h3>Course Information</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold">Course Information</h3>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowEditDetails(true)}
+                    className="flex items-center gap-2 rounded-xl border-slate-200 hover:border-indigo-200 hover:text-indigo-600 shadow-sm"
+                  >
+                    <Edit size={14} />
+                    Edit Details
+                  </Button>
+                </div>
                 <div className="detail-item">
                   <label>Title:</label>
                   <p>{course.title}</p>
@@ -658,6 +670,15 @@ export default function ManageCourse({ user, logout }) {
           />
         )
       }
+      <EditCourseDetailsModal
+        open={showEditDetails}
+        onOpenChange={setShowEditDetails}
+        course={course}
+        onSuccess={() => {
+          setShowEditDetails(false);
+          fetchCourseData();
+        }}
+      />
     </div >
   );
 }

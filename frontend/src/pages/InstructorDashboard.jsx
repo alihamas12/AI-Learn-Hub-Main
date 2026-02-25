@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
-import CreateCourseForm from '@/components/instructor/CreateCourseForm';
+import QuickCreateCourseModal from '@/components/instructor/QuickCreateCourseModal';
 import CoursesList from '@/components/instructor/CoursesList';
 import EarningsView from '@/components/instructor/EarningsView';
 import StripeConnectCard from '@/components/instructor/StripeConnectCard';
@@ -63,7 +63,14 @@ export default function InstructorDashboard({ user, logout }) {
     }
   };
 
-  const handleCourseCreated = () => { setShowCreateForm(false); fetchInstructorData(); };
+  const handleCourseCreated = (courseId) => {
+    setShowCreateForm(false);
+    if (courseId) {
+      navigate(`/instructor/course/${courseId}`);
+    } else {
+      fetchInstructorData();
+    }
+  };
 
   if (loading) {
     return (
@@ -197,9 +204,11 @@ export default function InstructorDashboard({ user, logout }) {
         </Tabs>
       </div>
 
-      {showCreateForm && (
-        <CreateCourseForm onClose={() => setShowCreateForm(false)} onSuccess={handleCourseCreated} />
-      )}
+      <QuickCreateCourseModal
+        open={showCreateForm}
+        onOpenChange={setShowCreateForm}
+        onSuccess={handleCourseCreated}
+      />
     </div>
   );
 }

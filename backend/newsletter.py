@@ -65,7 +65,11 @@ Length: 400-500 words
 """
         
         # Call Groq AI
-        chat = LlmChat(api_key=os.environ.get('GROQ_API_KEY'))
+        chat = LlmChat(
+            api_key=os.environ.get('GROQ_API_KEY'),
+            session_id="newsletter-gen"
+        ).with_model("groq", "llama-3.3-70b-versatile")
+        
         content = await chat.send_message(UserMessage(text=prompt))
         
         # Generate title
@@ -117,55 +121,71 @@ async def send_newsletter_email(blog_post, subscriber_email, unsubscribe_token):
         # Create HTML email
         html_content = f"""
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; }}
-        .container {{ max-width: 600px; margin: 0 auto; }}
-        .header {{ background: #4F46E5; color: white; padding: 30px 20px; text-align: center; }}
-        .header h1 {{ margin: 0; font-size: 28px; }}
-        .content {{ padding: 30px 20px; background: #ffffff; }}
-        .content h2 {{ color: #1F2937; margin-top: 0; }}
-        .content img {{ max-width: 100%; height: auto; border-radius: 8px; margin: 20px 0; }}
+        body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1a202c; margin: 0; padding: 0; background-color: #f8fafc; }}
+        .wrapper {{ width: 100%; padding: 40px 0; background-color: #f8fafc; }}
+        .container {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }}
+        .header {{ background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 50px 40px; text-align: center; color: white; }}
+        .header h1 {{ margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.025em; }}
+        .header p {{ margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; font-weight: 500; }}
+        .content {{ padding: 40px; }}
+        .content h2 {{ color: #1e293b; font-size: 24px; font-weight: 700; margin-top: 0; margin-bottom: 20px; line-height: 1.3; }}
+        .blog-image {{ width: 100%; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }}
+        .text-content {{ color: #475569; font-size: 16px; line-height: 1.8; }}
+        .cta-container {{ text-align: center; margin-top: 40px; margin-bottom: 20px; }}
         .cta-button {{ 
             display: inline-block; 
-            background: #4F46E5; 
-            color: white !important; 
-            padding: 14px 28px; 
+            background: linear-gradient(to r, #4f46e5, #7c3aed); 
+            color: #ffffff !important; 
+            padding: 16px 32px; 
             text-decoration: none; 
-            border-radius: 6px; 
-            margin: 20px 0;
-            font-weight: bold;
+            border-radius: 14px; 
+            font-weight: 700; 
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: transform 0.2s ease;
         }}
-        .footer {{ background: #F3F4F6; padding: 20px; text-align: center; font-size: 12px; color: #6B7280; }}
-        .footer a {{ color: #4F46E5; text-decoration: none; }}
+        .footer {{ padding: 30px 40px; text-align: center; font-size: 13px; color: #94a3b8; background-color: #f8fafc; border-top: 1px solid #f1f5f9; }}
+        .footer a {{ color: #6366f1; text-decoration: none; font-weight: 600; }}
+        .badge {{ display: inline-block; padding: 6px 12px; border-radius: 99px; background: #eef2ff; color: #4f46e5; font-size: 12px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.05em; }}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>📚 LearnHub Weekly</h1>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">Insights for Lifelong Learners</p>
-        </div>
-        
-        <div class="content">
-            <h2>{blog_post['title']}</h2>
-            
-            {f'<img src="{blog_post["cover_image"]}" alt="Course thumbnail">' if blog_post.get('cover_image') else ''}
-            
-            <div style="color: #374151;">
-                {blog_post['content'].replace(chr(10), '<br>')}
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>AI LearnHub</h1>
+                <p>Your Weekly Dose of Innovation</p>
             </div>
             
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="{course_url}" class="cta-button">Explore This Course →</a>
+            <div class="content">
+                <span class="badge">Weekly Newsletter</span>
+                <h2>{blog_post['title']}</h2>
+                
+                {f'<img src="{blog_post["cover_image"]}" alt="Course thumbnail" class="blog-image">' if blog_post.get('cover_image') else ''}
+                
+                <div class="text-content">
+                    {blog_post['content'].replace(chr(10), '<br>')}
+                </div>
+                
+                <div class="cta-container">
+                    <a href="{course_url}" class="cta-button">Access Today's Course →</a>
+                </div>
             </div>
-        </div>
-        
-        <div class="footer">
-            <p>You're receiving this because you subscribed to LearnHub newsletter.</p>
-            <p><a href="{unsubscribe_url}">Unsubscribe</a> | <a href="{frontend_url}">Visit LearnHub</a></p>
-            <p>© 2026 LearnHub. All rights reserved.</p>
+            
+            <div class="footer">
+                <p>You are receiving this because you are part of the AI LearnHub community.</p>
+                <p>
+                    <a href="{unsubscribe_url}">Unsubscribe</a> • 
+                    <a href="{frontend_url}">Visit Website</a> • 
+                    <a href="mailto:support@britsyncaiacademy.online">Support</a>
+                </p>
+                <p style="margin-top: 15px;">© 2026 AI LearnHub. All rights reserved.</p>
+            </div>
         </div>
     </div>
 </body>
@@ -173,11 +193,18 @@ async def send_newsletter_email(blog_post, subscriber_email, unsubscribe_token):
 """
         
         # Send via SendGrid
-        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        sender = os.environ.get('SENDER_EMAIL', 'newsletter@britsyncaiacademy.online')
+        
+        if not api_key:
+            logger.warning("SENDGRID_API_KEY missing. Skipping newsletter email.")
+            return False
+
+        sg = SendGridAPIClient(api_key)
         message = Mail(
-            from_email=os.environ.get('SENDGRID_FROM_EMAIL', 'newsletter@learnhub.com'),
+            from_email=sender,
             to_emails=subscriber_email,
-            subject=f"📚 {blog_post['title']}",
+            subject=f"🚀 {blog_post['title']} | AI LearnHub",
             html_content=html_content
         )
         

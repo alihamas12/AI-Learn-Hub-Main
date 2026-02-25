@@ -7,6 +7,7 @@ from typing import Optional
 from dataclasses import dataclass
 from typing import Optional
 import os
+import openai
 
 
 @dataclass
@@ -44,7 +45,6 @@ class LlmChat:
         """Send a message and get response"""
         try:
             if self.provider == "openai":
-                import openai
                 client = openai.AsyncOpenAI(api_key=self.api_key)
                 
                 messages = []

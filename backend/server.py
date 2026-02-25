@@ -14,6 +14,10 @@ from dotenv import load_dotenv
 import bcrypt
 import dns.resolver
 
+# Logger configuration
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # Fix for MongoDB Atlas DNS resolution timeouts
 # Forces the use of reliable public DNS servers
 try:
@@ -342,45 +346,172 @@ def create_access_token(data: dict):
     return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
+async def send_welcome_email(email: str, name: str):
+    try:
+        frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        sender = os.environ.get('SENDER_EMAIL')
+        
+        if not api_key or not sender:
+            logger.warning("SendGrid configuration missing. Skipping welcome email.")
+            return
+
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1a202c; margin: 0; padding: 0; background-color: #f8fafc; }}
+                .wrapper {{ width: 100%; padding: 40px 0; background-color: #f8fafc; }}
+                .container {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }}
+                .header {{ background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 50px 20px; text-align: center; color: white; }}
+                .header h1 {{ margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.025em; }}
+                .content {{ padding: 40px; text-align: center; }}
+                .content h2 {{ color: #1e293b; font-size: 24px; margin-bottom: 20px; }}
+                .content p {{ font-size: 16px; color: #475569; margin-bottom: 30px; line-height: 1.8; }}
+                .features {{ display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 35px; }}
+                .feature-tag {{ background: #f1f5f9; color: #4f46e5; padding: 8px 16px; border-radius: 99px; font-size: 14px; font-weight: 600; }}
+                .button-container {{ margin: 35px 0; }}
+                .button {{ 
+                    background: linear-gradient(to r, #4f46e5, #7c3aed); 
+                    color: #ffffff !important; 
+                    padding: 16px 36px; 
+                    text-decoration: none; 
+                    border-radius: 14px; 
+                    font-weight: 700; 
+                    font-size: 16px;
+                    display: inline-block;
+                    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+                }}
+                .footer {{ padding: 30px; text-align: center; font-size: 13px; color: #94a3b8; background-color: #f8fafc; border-top: 1px solid #f1f5f9; }}
+                .footer a {{ color: #6366f1; text-decoration: none; font-weight: 600; }}
+            </style>
+        </head>
+        <body>
+            <div class="wrapper">
+                <div class="container">
+                    <div class="header">
+                        <h1>AI LearnHub</h1>
+                    </div>
+                    <div class="content">
+                        <h2>Welcome to the Future of Learning, {name}! 🚀</h2>
+                        <p>We're thrilled to have you join our global community of innovators and lifelong learners. Get ready to master industry-leading skills with our AI-powered courses.</p>
+                        
+                        <div class="features">
+                            <span class="feature-tag">AI Tutors</span>
+                            <span class="feature-tag">Verified Certificates</span>
+                            <span class="feature-tag">Expert Mentors</span>
+                        </div>
+
+                        <div class="button-container">
+                            <a href="{frontend_url}/courses" class="button">Explore Courses</a>
+                        </div>
+                        <p style="font-size: 14px; color: #94a3b8;">Need help getting started? Our support team is always here for you.</p>
+                    </div>
+                    <div class="footer">
+                        <p>© 2026 AI LearnHub. All rights reserved.</p>
+                        <p><a href="{frontend_url}">Visit Platform</a> • <a href="mailto:support@britsyncaiacademy.online">Contact Support</a></p>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+
+        message = Mail(
+            from_email=sender,
+            to_emails=email,
+            subject='✨ Welcome to AI LearnHub, ' + name + '!',
+            html_content=html_content
+        )
+        
+        sg = SendGridAPIClient(api_key)
+        sg.send(message)
+        logger.info(f"Welcome email sent to {email}")
+    except Exception as e:
+        logger.error(f"Failed to send welcome email: {str(e)}")
+
+
 async def send_reset_email(email: str, token: str):
     try:
         frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
         reset_link = f"{frontend_url}/reset-password?token={token}"
         
-        
-        logger.info(f"Password Reset Link generated: {reset_link}")
+        logger.info(f"Password reset link generated for {email}")
 
         api_key = os.environ.get('SENDGRID_API_KEY')
         sender = os.environ.get('SENDER_EMAIL')
         
-
-        if not api_key:
-            logger.warning("SendGrid API Key (SENDGRID_API_KEY) is missing from environment variables. Skipping email send.")
+        if not api_key or not sender:
+            logger.warning("SendGrid configuration missing. Check SENDGRID_API_KEY and SENDER_EMAIL.")
+            # For development, we still log the link
+            logger.info(f"DEVELOPMENT RESET LINK: {reset_link}")
             return
 
-        if not sender:
-            logger.warning("Sender Email (SENDER_EMAIL) is missing from environment variables. Skipping email send.")
-            return
+        html_content = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #1a202c; margin: 0; padding: 0; background-color: #f7fafc; }}
+                .wrapper {{ width: 100%; padding: 40px 0; background-color: #f7fafc; }}
+                .container {{ max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; shadow: 0 4px 6px rgba(0,0,0,0.05); }}
+                .header {{ background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); padding: 40px 20px; text-align: center; color: white; }}
+                .header h1 {{ margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.025em; }}
+                .content {{ padding: 40px; text-align: center; }}
+                .content p {{ font-size: 16px; color: #4a5568; margin-bottom: 30px; }}
+                .button-container {{ margin: 35px 0; }}
+                .button {{ 
+                    background-color: #4f46e5; 
+                    color: #ffffff !important; 
+                    padding: 16px 32px; 
+                    text-decoration: none; 
+                    border-radius: 12px; 
+                    font-weight: 700; 
+                    font-size: 16px;
+                    display: inline-block;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+                }}
+                .footer {{ padding: 30px; text-align: center; font-size: 13px; color: #a0aec0; background-color: #f8fafc; }}
+                .footer a {{ color: #4f46e5; text-decoration: none; font-weight: 600; }}
+                .divider {{ height: 1px; background-color: #edf2f7; margin: 0 40px; }}
+            </style>
+        </head>
+        <body>
+            <div class="wrapper">
+                <div class="container">
+                    <div class="header">
+                        <h1>AI LearnHub</h1>
+                    </div>
+                    <div class="content">
+                        <h2 style="color: #2d3748; font-size: 22px; margin-bottom: 20px;">Reset Your Password</h2>
+                        <p>We received a request to reset your password. Click the button below to set a new one. This link will expire in 1 hour.</p>
+                        <div class="button-container">
+                            <a href="{reset_link}" class="button">Reset Password</a>
+                        </div>
+                        <p style="font-size: 14px; color: #718096;">If you didn't request this, you can safely ignore this email.</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="footer">
+                        <p>© 2026 AI LearnHub. All rights reserved.</p>
+                        <p><a href="{frontend_url}">Visit our website</a> | <a href="mailto:support@britsyncaiacademy.online">Contact Support</a></p>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
 
         message = Mail(
             from_email=sender,
             to_emails=email,
-            subject='Reset Your LearnHub Password',
-            html_content=f"""
-                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-                    <h1 style="color: #1e40af; font-size: 24px;">Reset Your Password</h1>
-                    <p style="color: #374151; line-height: 1.5;">You requested to reset your password for LearnHub. Click the button below to set a new password. This link is valid for 1 hour.</p>
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="{reset_link}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Reset Password</a>
-                    </div>
-                    <p style="color: #6b7280; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
-                </div>
-            """
+            subject='🔒 Reset Your AI LearnHub Password',
+            html_content=html_content
         )
         
         sg = SendGridAPIClient(api_key)
         response = sg.send(message)
-        
         logger.info(f"Password reset email sent to {email}. Status: {response.status_code}")
     except Exception as e:
         logger.error(f"Failed to send reset email: {str(e)}")
@@ -452,7 +583,7 @@ async def send_email(to: str, subject: str, content: str):
 
 # ==================== AUTH ROUTES ====================
 @api_router.post("/auth/register")
-async def register(user_data: UserCreate):
+async def register(user_data: UserCreate, background_tasks: BackgroundTasks):
     existing = await db.users.find_one({"email": user_data.email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -463,8 +594,7 @@ async def register(user_data: UserCreate):
     
     user = User(**user_dict)
     
-    # Force role to student for new signups (even if they requested instructor)
-    # They will be promoted after approval
+    # Force role to student for new signups
     requested_role = user.role
     user.role = "student"
     
@@ -475,7 +605,10 @@ async def register(user_data: UserCreate):
     
     await db.users.insert_one(user_doc)
     
-    # AUTO-CREATE INSTRUCTOR DOCUMENT if user registers as instructor
+    # Send welcome email in background
+    background_tasks.add_task(send_welcome_email, user.email, user.name)
+    
+    # AUTO-CREATE INSTRUCTOR DOCUMENT
     if requested_role == "instructor":
         instructor = Instructor(
             user_id=user.id,
@@ -2705,10 +2838,6 @@ logger = logging.getLogger(__name__)
 @app.get("/")
 async def root():
     return {"message": "LearnHub Backend is running", "docs": "/docs"}
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 
 @app.get("/")
 async def root():
