@@ -1,4 +1,4 @@
-# AI LearnHub - Complete Deployment Guide
+# BritSyncAI Academy - Complete Deployment Guide
 
 ## 📋 Table of Contents
 1. [Prerequisites](#prerequisites)
@@ -84,8 +84,8 @@ sudo apt install -y nodejs
 # Install Python 3.11
 sudo apt install -y python3.11 python3.11-venv python3-pip
 
-# Install Yarn (for frontend)
-npm install -g pnpm
+# Install NPM (comes with Node.js)
+npm -v
 
 # Install Nginx (reverse proxy)
 sudo apt install -y nginx
@@ -100,7 +100,7 @@ sudo systemctl start mongod
 sudo systemctl enable mongod
 
 # Install PM2 (process manager)
-pnpm add -g pm2
+npm install -g pm2
 
 # Install Certbot (for SSL)
 sudo apt install -y certbot python3-certbot-nginx
@@ -119,7 +119,7 @@ sudo apt install -y certbot python3-certbot-nginx
    - Choose free tier (M0) or paid tier based on needs
 3. **Create Database User**:
    - Database Access → Add New Database User
-   - Username: `learnhub_user`
+   - Username: `britsyncai_user`
    - Password: (generate strong password)
    - Database User Privileges: Atlas Admin
 4. **Whitelist IP Address**:
@@ -129,7 +129,7 @@ sudo apt install -y certbot python3-certbot-nginx
    - Click "Connect" → "Connect your application"
    - Copy the connection string:
    ```
-   mongodb+srv://learnhub_user:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+   mongodb+srv://britsyncai_user:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
    ```
 
 ### Option 2: Local MongoDB
@@ -140,16 +140,16 @@ sudo systemctl start mongod
 
 # Create database and user
 mongosh
-> use learnhub
+> use britsyncai
 > db.createUser({
-    user: "learnhub_user",
+    user: "britsyncai_user",
     pwd: "your_secure_password",
-    roles: [{ role: "readWrite", db: "learnhub" }]
+    roles: [{ role: "readWrite", db: "britsyncai" }]
   })
 > exit
 
 # Connection string will be:
-# mongodb://learnhub_user:your_secure_password@localhost:27017/learnhub
+# mongodb://britsyncai_user:your_secure_password@localhost:27017/britsyncai
 ```
 
 ---
@@ -160,8 +160,8 @@ mongosh
 
 ```bash
 cd /var/www
-git clone <your-repo-url> learnhub
-cd learnhub/backend
+git clone <your-repo-url> britsyncai
+cd britsyncai/backend
 ```
 
 ### 2. Create Virtual Environment
@@ -179,12 +179,12 @@ pip install -r requirements.txt
 
 ### 4. Configure Environment Variables
 
-Create `/var/www/learnhub/backend/.env`:
+Create `/var/www/britsyncai/backend/.env`:
 
 ```bash
 # Database Configuration
-MONGO_URL=mongodb+srv://learnhub_user:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-DB_NAME=learnhub
+MONGO_URL=mongodb+srv://britsyncai_user:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+DB_NAME=britsyncai
 
 # JWT Configuration
 JWT_SECRET=your_super_secure_random_jwt_secret_key_here_min_32_chars
@@ -218,15 +218,15 @@ PORT=8001
 
 ### 5. Create PM2 Ecosystem File
 
-Create `/var/www/learnhub/backend/ecosystem.config.js`:
+Create `/var/www/britsyncai/backend/ecosystem.config.js`:
 
 ```javascript
 module.exports = {
   apps: [{
-    name: 'learnhub-backend',
+    name: 'britsyncai-backend',
     script: 'venv/bin/uvicorn',
     args: 'server:app --host 0.0.0.0 --port 8001',
-    cwd: '/var/www/learnhub/backend',
+    cwd: '/var/www/britsyncai/backend',
     instances: 2,
     exec_mode: 'cluster',
     watch: false,
@@ -234,8 +234,8 @@ module.exports = {
     env: {
       NODE_ENV: 'production'
     },
-    error_file: '/var/log/pm2/learnhub-backend-error.log',
-    out_file: '/var/log/pm2/learnhub-backend-out.log',
+    error_file: '/var/log/pm2/britsyncai-backend-error.log',
+    out_file: '/var/log/pm2/britsyncai-backend-out.log',
     log_date_format: 'YYYY-MM-DD HH:mm:ss Z'
   }]
 };
@@ -263,12 +263,12 @@ curl http://localhost:8001/api/courses
 ### 1. Navigate to Frontend Directory
 
 ```bash
-cd /var/www/learnhub/frontend
+cd /var/www/britsyncai/frontend
 ```
 
 ### 2. Configure Environment Variables
 
-Create `/var/www/learnhub/frontend/.env`:
+Create `/var/www/britsyncai/frontend/.env`:
 
 ```bash
 # Backend API URL - CHANGE THIS TO YOUR DOMAIN
@@ -285,16 +285,16 @@ REACT_APP_BACKEND_URL=https://yourdomain.com
 ### 3. Install Dependencies
 
 ```bash
-pnpm install
+npm install
 ```
 
 ### 4. Build for Production
 
 ```bash
-pnpm run build
+npm run build
 ```
 
-This creates an optimized production build in `/var/www/learnhub/frontend/build`
+This creates an optimized production build in `/var/www/britsyncai/frontend/build`
 
 ### 5. Option A: Serve with Nginx (Recommended)
 
@@ -303,16 +303,16 @@ Frontend will be served as static files by Nginx. See [Domain & SSL Setup](#doma
 ### 5. Option B: Serve with PM2 + Serve
 
 ```bash
-pnpm add -g serve
+npm install -g serve
 
 # Create PM2 config for frontend
-cat > /var/www/learnhub/frontend/ecosystem.frontend.js << 'EOF'
+cat > /var/www/britsyncai/frontend/ecosystem.frontend.js << 'EOF'
 module.exports = {
   apps: [{
-    name: 'learnhub-frontend',
+pm2 start ecosystem.frontend.js
     script: 'serve',
     args: '-s build -l 3000',
-    cwd: '/var/www/learnhub/frontend',
+    cwd: '/var/www/britsyncai/frontend',
     instances: 1,
     watch: false,
     env: {
@@ -435,7 +435,7 @@ Wait 10-30 minutes for DNS propagation.
 
 #### Option A: Same Domain Setup (yourdomain.com for both)
 
-Create `/etc/nginx/sites-available/learnhub`:
+Create `/etc/nginx/sites-available/britsyncai`:
 
 ```nginx
 # Redirect HTTP to HTTPS
@@ -480,7 +480,7 @@ server {
 
     # Frontend Static Files
     location / {
-        root /var/www/learnhub/frontend/build;
+        root /var/www/britsyncai/frontend/build;
         try_files $uri $uri/ /index.html;
         
         # Cache static assets
@@ -500,7 +500,7 @@ server {
 
 #### Option B: Subdomain Setup (api.yourdomain.com)
 
-Create `/etc/nginx/sites-available/learnhub`:
+Create `/etc/nginx/sites-available/britsyncai`:
 
 ```nginx
 # Backend API - api.yourdomain.com
@@ -548,7 +548,7 @@ server {
     ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
 
-    root /var/www/learnhub/frontend/build;
+    root /var/www/britsyncai/frontend/build;
     index index.html;
 
     location / {
@@ -569,7 +569,7 @@ server {
 sudo nginx -t
 
 # Create symlink
-sudo ln -s /etc/nginx/sites-available/learnhub /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/britsyncai /etc/nginx/sites-enabled/
 
 # Remove default site
 sudo rm /etc/nginx/sites-enabled/default
@@ -653,17 +653,17 @@ https://www.ssllabs.com/ssltest/analyze.html?d=yourdomain.com
 ```bash
 # Install Heroku CLI
 heroku login
-cd /var/www/learnhub/backend
-heroku create learnhub-backend
+cd /var/www/britsyncai/backend
+heroku create britsyncai-backend
 heroku config:set MONGO_URL="..." STRIPE_SECRET_KEY="..." ...
 git push heroku main
 ```
 
 **Frontend:**
 ```bash
-cd /var/www/learnhub/frontend
+cd /var/www/britsyncai/frontend
 # Update .env with Heroku backend URL
-pnpm run build
+npm run build
 # Deploy to Netlify/Vercel (frontend)
 ```
 
@@ -678,7 +678,7 @@ pnpm run build
 mongosh "YOUR_MONGO_URL"
 
 # Use database
-use learnhub
+use britsyncai
 
 # Create admin user (change password!)
 db.users.insertOne({
@@ -725,8 +725,8 @@ curl https://yourdomain.com/api/courses
 ### 5. Setup Monitoring
 
 ```bash
-# Install monitoring tools
-pnpm add -g pm2-logrotate
+npm install -g pm2-logrotate
+npm install -g pm2-logrotate
 pm2 install pm2-logrotate
 
 # Setup log rotation
@@ -796,13 +796,13 @@ sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 ```bash
 # Check PM2 logs
-pm2 logs learnhub-backend
+pm2 logs britsyncai-backend
 
 # Check if port is in use
 sudo netstat -tulpn | grep 8001
 
 # Test backend directly
-cd /var/www/learnhub/backend
+cd /var/www/britsyncai/backend
 source venv/bin/activate
 uvicorn server:app --host 0.0.0.0 --port 8001
 ```
@@ -814,8 +814,8 @@ uvicorn server:app --host 0.0.0.0 --port 8001
 # Common issue: REACT_APP_BACKEND_URL incorrect
 
 # Rebuild frontend
-cd /var/www/learnhub/frontend
-yarn build
+cd /var/www/britsyncai/frontend
+npm run build
 
 # Check Nginx logs
 sudo tail -f /var/log/nginx/error.log
@@ -854,10 +854,10 @@ sudo nginx -t
 pm2 status
 
 # Check backend logs
-pm2 logs learnhub-backend
+pm2 logs britsyncai-backend
 
 # Restart backend
-pm2 restart learnhub-backend
+pm2 restart britsyncai-backend
 
 # Test backend directly
 curl http://localhost:8001/api/courses
@@ -882,7 +882,7 @@ stripe listen --forward-to https://yourdomain.com/api/webhook/stripe
 # Check SendGrid API key
 # Verify sender email is verified in SendGrid
 # Check backend logs for email errors
-pm2 logs learnhub-backend | grep -i email
+pm2 logs britsyncai-backend | grep -i email
 
 # Test SendGrid directly
 curl --request POST \
@@ -926,7 +926,7 @@ location /api {
 mongosh "YOUR_MONGO_URL"
 
 // Create indexes for better performance
-use learnhub
+use britsyncai
 
 db.users.createIndex({ email: 1 }, { unique: true })
 db.courses.createIndex({ status: 1, category: 1 })
@@ -941,19 +941,19 @@ db.certificates.createIndex({ user_id: 1, course_id: 1 })
 
 ```bash
 # Update application
-cd /var/www/learnhub
+cd /var/www/britsyncai
 git pull origin main
 
 # Update backend
 cd backend
 source venv/bin/activate
 pip install -r requirements.txt
-pm2 restart learnhub-backend
+pm2 restart britsyncai-backend
 
 # Update frontend
 cd ../frontend
-yarn install
-yarn build
+npm install
+npm run build
 sudo systemctl reload nginx
 
 # View logs
@@ -989,7 +989,7 @@ sudo systemctl restart nginx
 
 ## License
 
-© 2024 LearnHub. All rights reserved.
+© 2024 BritSyncAI Academy. All rights reserved.
 
 ---
 

@@ -131,11 +131,11 @@ export default function BecomeInstructor({ user, logout }) {
           <div className="application-header">
             <BookOpen size={64} className="header-icon" />
             <h1>Become an Instructor</h1>
-            <p>Share your knowledge and earn money by teaching on AI LearnHub</p>
+            <p>Share your knowledge and earn money by teaching on BritSyncAI Academy</p>
           </div>
 
           <div className="benefits-section">
-            <h2>Why Teach on AI LearnHub?</h2>
+            <h2>Why Teach on BritSyncAI Academy?</h2>
             <div className="benefits-grid">
               <div className="benefit-card">
                 <h3>Earn Money</h3>

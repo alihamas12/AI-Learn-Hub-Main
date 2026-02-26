@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { BookOpen, User, LogOut, LayoutDashboard, Menu, X, GraduationCap } from 'lucide-react';
+import logo from '../Logo/logo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,11 +46,13 @@ export default function Navbar({ user, logout }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {/* Brand */}
           <Link to="/" className="flex items-center gap-3 group" data-testid="navbar-brand">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg group-hover:shadow-indigo-400/40 transition-all duration-300 group-hover:scale-105">
-              <span className="text-white font-black text-xl">A</span>
-            </div>
+            <img
+              src={logo}
+              alt="BritSyncAI Academy Logo"
+              className="w-10 h-10 object-contain rounded-xl shadow-md group-hover:scale-110 transition-all duration-300"
+            />
             <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-              AI LearnHub
+              BritSyncAI Academy
             </span>
           </Link>
 

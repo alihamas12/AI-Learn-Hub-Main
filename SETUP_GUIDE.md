@@ -1,4 +1,4 @@
-# AI LearnHub - Complete Setup & Running Guide
+# BritSyncAI Academy - Complete Setup & Running Guide
 
 A comprehensive online learning platform with course management, payments, and AI-powered features.
 
@@ -25,7 +25,7 @@ Before running this application, ensure you have the following installed:
 |----------|---------|---------------|
 | **Python** | 3.9+ | https://www.python.org/downloads/ |
 | **Node.js** | 18+ | https://nodejs.org/ |
-| **pnpm** | 8+ | https://pnpm.io/installation |
+| **npm** | 9+ | https://nodejs.org/ |
 | **Git** | Latest | https://git-scm.com/ |
 
 ### Required Accounts (for full functionality)
@@ -106,7 +106,7 @@ cd frontend
 ### Step 2: Install Dependencies
 
 ```bash
-pnpm install
+npm install
 ```
 
 ### Step 3: Configure Environment Variables
@@ -128,8 +128,8 @@ REACT_APP_BACKEND_URL=http://localhost:8001
 
 ```env
 # ==================== DATABASE ====================
-MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/learnhub?retryWrites=true&w=majority
-DB_NAME=learnhub
+MONGO_URL=mongodb+srv://username:password@cluster.mongodb.net/britsyncai?retryWrites=true&w=majority
+DB_NAME=britsyncai
 
 # ==================== AUTHENTICATION ====================
 JWT_SECRET=your-super-secret-key-change-this-in-production
@@ -188,7 +188,7 @@ uvicorn server:app --reload --port 8001
 **Terminal 2 - Frontend:**
 ```bash
 cd frontend
-pnpm start
+npm start
 ```
 
 ### Option 2: Using Specific Ports
@@ -200,7 +200,7 @@ uvicorn server:app --reload --host 0.0.0.0 --port 8001
 
 **Frontend (default: 3000):**
 ```bash
-pnpm start
+npm start
 ```
 
 ### Access Points
@@ -249,14 +249,14 @@ ModuleNotFoundError: No module named 'xyz'
 pip install -r requirements.txt
 ```
 
-#### 3. pnpm Errors (Frontend)
+#### 3. npm Errors (Frontend)
 ```
 npm ERR! code ERESOLVE
 ```
 **Solution:**
 ```bash
 rm -rf node_modules package-lock.json
-pnpm install
+npm install
 ```
 
 #### 4. Port Already in Use
@@ -290,7 +290,7 @@ For production deployment, you'll need:
 2. **Build the frontend:**
    ```bash
    cd frontend
-   pnpm run build
+   npm run build
    ```
 3. **Use a process manager for backend (e.g., PM2, Supervisor)**
 4. **Set up NGINX as reverse proxy**
@@ -318,11 +318,11 @@ uvicorn server:app --reload --port 8001
 
 # 4. Frontend setup (new terminal)
 cd frontend
-pnpm install
+npm install
 # Edit .env if needed
 
 # 5. Start frontend
-pnpm start
+npm start
 
 # 6. Open browser
 # http://localhost:3000

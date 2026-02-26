@@ -451,7 +451,7 @@ export default function QuickCreateCourseModal({ open, onOpenChange, onSuccess }
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Google Preview</span>
                             </div>
                             <h4 className="text-blue-600 text-lg font-medium truncate hover:underline cursor-pointer">{formData.title || 'Course Title Preview'}</h4>
-                            <p className="text-emerald-700 text-xs mb-1">https://ailearnhub.com/courses/{formData.title.toLowerCase().replace(/ /g, '-') || 'url'}</p>
+                            <p className="text-emerald-700 text-xs mb-1">https://britsyncaiacademy.online/courses/{formData.title.toLowerCase().replace(/ /g, '-') || 'url'}</p>
                             <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
                                 {formData.meta_description || 'Write a meta description to see how your course will look on search engine results pages.'}
                             </p>
@@ -490,7 +490,7 @@ export default function QuickCreateCourseModal({ open, onOpenChange, onSuccess }
                                 <div
                                     key={i}
                                     className={`h-1 rounded-full transition-all duration-500 ${i + 1 === step ? 'w-10 bg-indigo-500' :
-                                            i + 1 < step ? 'w-6 bg-emerald-500' : 'w-6 bg-white/20'
+                                        i + 1 < step ? 'w-6 bg-emerald-500' : 'w-6 bg-white/20'
                                         }`}
                                 />
                             ))}
@@ -505,7 +505,7 @@ export default function QuickCreateCourseModal({ open, onOpenChange, onSuccess }
                             return (
                                 <div key={i} className="flex flex-col items-center gap-2 group">
                                     <div className={`w-12 h-12 rounded-[1.25rem] flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-white text-indigo-900 scale-110 shadow-xl' :
-                                            isPast ? 'bg-emerald-500 text-white' : 'bg-white/10 text-white/50 border border-white/10'
+                                        isPast ? 'bg-emerald-500 text-white' : 'bg-white/10 text-white/50 border border-white/10'
                                         }`}>
                                         {isPast ? <Check size={20} /> : <Icon size={20} />}
                                     </div>

@@ -1,4 +1,4 @@
-# 🚀 AI LearnHub - Complete Guide to Run the Project
+# 🚀 BritSyncAI Academy - Complete Guide to Run the Project
 
 ## 📋 Prerequisites
 
@@ -56,8 +56,8 @@ Open `backend/.env` and update these values:
 
 ```env
 # Database (MongoDB Atlas connection string)
-MONGO_URL=mongodb+srv://your_user:your_password@cluster.mongodb.net/learnhub?retryWrites=true&w=majority
-DB_NAME=learnhub
+MONGO_URL=mongodb+srv://your_user:your_password@cluster.mongodb.net/britsyncai?retryWrites=true&w=majority
+DB_NAME=britsyncai
 
 # JWT Secret (change this for security)
 JWT_SECRET=your-super-secret-key-change-this-in-production

@@ -1,8 +1,8 @@
-# AI LearnHub - Multi-Instructor Learning Platform
+# BritSyncAI Academy - Multi-Instructor Learning Platform
 
 A comprehensive Coursera-style learning management system built with FastAPI, React, and MongoDB.
 
-![AI LearnHub](https://img.shields.io/badge/AI_LearnHub-Learning%20Platform-10b981)
+![BritSyncAI Academy](https://img.shields.io/badge/BritSyncAI_Academy-Learning%20Platform-10b981)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.110.1-009688)
 ![React](https://img.shields.io/badge/React-18-61dafb)
 ![MongoDB](https://img.shields.io/badge/MongoDB-6.0-47a248)
@@ -45,7 +45,7 @@ A comprehensive Coursera-style learning management system built with FastAPI, Re
 ### Automated Deploy (Ubuntu 22.04)
 
 ```bash
-wget https://raw.githubusercontent.com/your-repo/learnhub/main/deploy.sh
+wget https://raw.githubusercontent.com/Ali-Hamas/AI-Learn-Hub/main/deploy.sh
 chmod +x deploy.sh
 ./deploy.sh
 ```
@@ -75,9 +75,9 @@ uvicorn server:app --reload --port 8001
 
 # Frontend
 cd frontend
-yarn install
+npm install
 # Copy and edit .env file
-yarn start
+npm start
 ```
 
 ## 🔧 Configuration

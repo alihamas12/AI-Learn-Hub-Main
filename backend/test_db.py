@@ -8,7 +8,7 @@ load_dotenv('.env')
 async def test_db():
     try:
         mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-        db_name = os.environ.get('DB_NAME', 'learnhub')
+        db_name = os.environ.get('DB_NAME', 'britsyncai')
         
         print(f"Connecting to database: {db_name}")
         client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=5000)

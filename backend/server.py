@@ -60,7 +60,7 @@ ROOT_DIR = Path(__file__).parent
 
 # MongoDB connection
 mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-db_name = os.environ.get('DB_NAME', 'learnhub')
+db_name = os.environ.get('DB_NAME', 'britsyncai')
 client = AsyncIOMotorClient(mongo_url)
 db = client[db_name]
 
@@ -77,7 +77,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 ADMIN_COMMISSION = float(os.environ.get('ADMIN_COMMISSION', 0.15))
 
 # Create the main app
-app = FastAPI(title="LearnHub API")
+app = FastAPI(title="BritSyncAI Academy API")
 
 # Add CORS middleware
 app.add_middleware(
@@ -391,7 +391,7 @@ async def send_welcome_email(email: str, name: str):
             <div class="wrapper">
                 <div class="container">
                     <div class="header">
-                        <h1>AI LearnHub</h1>
+                        <h1>BritSyncAI Academy</h1>
                     </div>
                     <div class="content">
                         <h2>Welcome to the Future of Learning, {name}! 🚀</h2>
@@ -409,7 +409,7 @@ async def send_welcome_email(email: str, name: str):
                         <p style="font-size: 14px; color: #94a3b8;">Need help getting started? Our support team is always here for you.</p>
                     </div>
                     <div class="footer">
-                        <p>© 2026 AI LearnHub. All rights reserved.</p>
+                        <p>© 2026 BritSyncAI Academy. All rights reserved.</p>
                         <p><a href="{frontend_url}">Visit Platform</a> • <a href="mailto:support@britsyncaiacademy.online">Contact Support</a></p>
                     </div>
                 </div>
@@ -421,7 +421,7 @@ async def send_welcome_email(email: str, name: str):
         message = Mail(
             from_email=sender,
             to_emails=email,
-            subject='✨ Welcome to AI LearnHub, ' + name + '!',
+            subject='✨ Welcome to BritSyncAI Academy, ' + name + '!',
             html_content=html_content
         )
         
@@ -482,7 +482,7 @@ async def send_reset_email(email: str, token: str):
             <div class="wrapper">
                 <div class="container">
                     <div class="header">
-                        <h1>AI LearnHub</h1>
+                        <h1>BritSyncAI Academy</h1>
                     </div>
                     <div class="content">
                         <h2 style="color: #2d3748; font-size: 22px; margin-bottom: 20px;">Reset Your Password</h2>
@@ -494,7 +494,7 @@ async def send_reset_email(email: str, token: str):
                     </div>
                     <div class="divider"></div>
                     <div class="footer">
-                        <p>© 2026 AI LearnHub. All rights reserved.</p>
+                        <p>© 2026 BritSyncAI Academy. All rights reserved.</p>
                         <p><a href="{frontend_url}">Visit our website</a> | <a href="mailto:support@britsyncaiacademy.online">Contact Support</a></p>
                     </div>
                 </div>
@@ -506,7 +506,7 @@ async def send_reset_email(email: str, token: str):
         message = Mail(
             from_email=sender,
             to_emails=email,
-            subject='🔒 Reset Your AI LearnHub Password',
+            subject='🔒 Reset Your BritSyncAI Academy Password',
             html_content=html_content
         )
         
@@ -2596,7 +2596,7 @@ def generate_certificate_pdf(user_name: str, course_title: str, completion_date:
     # Platform name
     c.setFont("Helvetica-Bold", 16)
     c.setFillColor(colors.HexColor('#10b981'))
-    c.drawCentredString(width / 2, 140, "LearnHub")
+    c.drawCentredString(width / 2, 140, "BritSyncAI Academy")
     
     c.save()
     buffer.seek(0)
@@ -2837,11 +2837,11 @@ logger = logging.getLogger(__name__)
 
 @app.get("/")
 async def root():
-    return {"message": "LearnHub Backend is running", "docs": "/docs"}
+    return {"message": "BritSyncAI Academy Backend is running", "docs": "/docs"}
 
 @app.get("/")
 async def root():
-    return {"message": "LearnHub Backend is running", "docs": "/docs"}
+    return {"message": "BritSyncAI Academy Backend is running", "docs": "/docs"}
 
 @app.get("/fix-my-account")
 async def fix_my_account(email: str):

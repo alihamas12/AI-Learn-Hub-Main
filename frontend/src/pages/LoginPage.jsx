@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { GraduationCap, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import logo from '../Logo/logo.png';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -53,10 +54,8 @@ export default function LoginPage({ setUser }) {
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center font-black text-white text-xl">
-              A
-            </div>
-            <span className="text-2xl font-extrabold text-white tracking-tight">AI LearnHub</span>
+            <img src={logo} alt="Logo" className="w-10 h-10 object-contain rounded-xl shadow-lg shadow-white/10" />
+            <span className="text-2xl font-extrabold text-white tracking-tight">BritSyncAI Academy</span>
           </Link>
 
           {/* Center Content */}
@@ -108,10 +107,8 @@ export default function LoginPage({ setUser }) {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <Link to="/" className="flex lg:hidden items-center gap-2 mb-8 justify-center">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center font-black text-white">
-              A
-            </div>
-            <span className="font-extrabold text-xl text-slate-800">AI LearnHub</span>
+            <img src={logo} alt="Logo" className="w-9 h-9 object-contain" />
+            <span className="font-extrabold text-xl text-slate-800">BritSyncAI Academy</span>
           </Link>
 
           {/* Header */}

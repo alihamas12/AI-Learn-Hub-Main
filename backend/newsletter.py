@@ -1,5 +1,5 @@
 """
-Newsletter system for LearnHub
+Newsletter system for BritSyncAI Academy
 Handles subscriptions, AI blog generation, and weekly email distribution
 """
 
@@ -158,7 +158,7 @@ async def send_newsletter_email(blog_post, subscriber_email, unsubscribe_token):
     <div class="wrapper">
         <div class="container">
             <div class="header">
-                <h1>AI LearnHub</h1>
+                <h1>BritSyncAI Academy</h1>
                 <p>Your Weekly Dose of Innovation</p>
             </div>
             
@@ -178,13 +178,13 @@ async def send_newsletter_email(blog_post, subscriber_email, unsubscribe_token):
             </div>
             
             <div class="footer">
-                <p>You are receiving this because you are part of the AI LearnHub community.</p>
+                <p>You are receiving this because you are part of the BritSyncAI Academy community.</p>
                 <p>
                     <a href="{unsubscribe_url}">Unsubscribe</a> • 
                     <a href="{frontend_url}">Visit Website</a> • 
                     <a href="mailto:support@britsyncaiacademy.online">Support</a>
                 </p>
-                <p style="margin-top: 15px;">© 2026 AI LearnHub. All rights reserved.</p>
+                <p style="margin-top: 15px;">© 2026 BritSyncAI Academy. All rights reserved.</p>
             </div>
         </div>
     </div>
@@ -204,7 +204,7 @@ async def send_newsletter_email(blog_post, subscriber_email, unsubscribe_token):
         message = Mail(
             from_email=sender,
             to_emails=subscriber_email,
-            subject=f"🚀 {blog_post['title']} | AI LearnHub",
+            subject=f"🚀 {blog_post['title']} | BritSyncAI Academy",
             html_content=html_content
         )
         

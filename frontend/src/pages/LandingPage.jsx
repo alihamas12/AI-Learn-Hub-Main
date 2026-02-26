@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import BlogSection from '@/components/BlogSection';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import '@/components/Newsletter.css';
+import logo from '../Logo/logo.png';
 import {
   BookOpen, Users, Award, TrendingUp, ArrowRight, Star, Play, ChevronRight,
   Zap, Shield, Globe
@@ -146,9 +147,7 @@ export default function LandingPage({ user, logout }) {
                   {/* Header */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-white text-xs">
-                        A
-                      </div>
+                      <img src={logo} alt="User Avatar" className="w-8 h-8 rounded-lg object-contain bg-white shadow-sm" />
                       <span className="font-bold text-slate-800 text-sm">My Learning</span>
                     </div>
                     <span className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2.5 py-1 rounded-full">3 Active</span>
@@ -217,7 +216,7 @@ export default function LandingPage({ user, logout }) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-4">
-              <span className="text-indigo-700 text-sm font-semibold">Why AI LearnHub?</span>
+              <span className="text-indigo-700 text-sm font-semibold">Why BritSyncAI Academy?</span>
             </div>
             <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Built for real results</h2>
             <p className="text-slate-500 text-lg max-w-xl mx-auto">Everything you need to go from beginner to expert, in one platform.</p>
@@ -255,7 +254,7 @@ export default function LandingPage({ user, logout }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {courses.map((course) => (
+            {courses?.map((course) => (
               <div
                 key={course.id}
                 className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-indigo-100/60 hover:-translate-y-1 transition-all duration-300 cursor-pointer"

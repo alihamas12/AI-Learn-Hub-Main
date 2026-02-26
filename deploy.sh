@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# LearnHub - Automated Deployment Script
+# BritSyncAI Academy - Automated Deployment Script
 # This script automates the deployment process on Ubuntu 22.04
 
 set -e  # Exit on error
 
 echo "=========================================="
-echo "  LearnHub Deployment Script"
+echo "  BritSyncAI Academy Deployment Script"
 echo "=========================================="
 echo ""
 
@@ -41,8 +41,8 @@ echo ""
 read -p "Your domain name (e.g., example.com): " DOMAIN_NAME
 read -p "Your email for SSL certificate: " SSL_EMAIL
 read -p "MongoDB Connection String: " MONGO_URL
-read -p "Database Name [learnhub]: " DB_NAME
-DB_NAME=${DB_NAME:-learnhub}
+read -p "Database Name [britsyncai]: " DB_NAME
+DB_NAME=${DB_NAME:-britsyncai}
 
 echo ""
 print_info "Starting deployment process..."
@@ -111,13 +111,13 @@ fi
 
 # Create directory structure
 print_info "Creating directory structure..."
-sudo mkdir -p /var/www/learnhub
-sudo chown -R $USER:$USER /var/www/learnhub
+sudo mkdir -p /var/www/britsyncai
+sudo chown -R $USER:$USER /var/www/britsyncai
 print_success "Directory structure created"
 
 # Setup Backend
 print_info "Setting up backend..."
-cd /var/www/learnhub/backend
+cd /var/www/britsyncai/backend
 
 # Create virtual environment
 if [ ! -d "venv" ]; then
@@ -166,10 +166,10 @@ print_info "Creating PM2 configuration..."
 cat > ecosystem.config.js << 'EOF'
 module.exports = {
   apps: [{
-    name: 'learnhub-backend',
+    name: 'britsyncai-backend',
     script: 'venv/bin/uvicorn',
     args: 'server:app --host 0.0.0.0 --port 8001',
-    cwd: '/var/www/learnhub/backend',
+    cwd: '/var/www/britsyncai/backend',
     instances: 2,
     exec_mode: 'cluster',
     watch: false,
@@ -184,10 +184,10 @@ print_success "PM2 configuration created"
 
 # Setup Frontend
 print_info "Setting up frontend..."
-cd /var/www/learnhub/frontend
+cd /var/www/britsyncai/frontend
 
 # Install dependencies
-yarn install
+npm install
 print_success "Frontend dependencies installed"
 
 # Create frontend .env
@@ -199,12 +199,12 @@ print_success "Frontend .env created"
 
 # Build frontend
 print_info "Building frontend (this may take a few minutes)..."
-yarn build
+npm run build
 print_success "Frontend built successfully"
 
 # Configure Nginx
 print_info "Configuring Nginx..."
-sudo tee /etc/nginx/sites-available/learnhub > /dev/null << EOF
+sudo tee /etc/nginx/sites-available/britsyncai > /dev/null << EOF
 server {
     listen 80;
     listen [::]:80;
@@ -241,7 +241,7 @@ server {
 
     # Frontend
     location / {
-        root /var/www/learnhub/frontend/build;
+        root /var/www/britsyncai/frontend/build;
         try_files \$uri \$uri/ /index.html;
         
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
@@ -259,7 +259,7 @@ server {
 EOF
 
 # Enable site
-sudo ln -sf /etc/nginx/sites-available/learnhub /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/britsyncai /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Test Nginx configuration
@@ -272,7 +272,7 @@ print_success "Nginx restarted"
 
 # Start backend with PM2
 print_info "Starting backend with PM2..."
-cd /var/www/learnhub/backend
+cd /var/www/britsyncai/backend
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup
@@ -299,17 +299,17 @@ echo "=========================================="
 echo "  Deployment Complete! 🎉"
 echo "=========================================="
 echo ""
-print_success "LearnHub has been deployed successfully!"
+print_success "BritSyncAI Academy has been deployed successfully!"
 echo ""
 echo "Next Steps:"
-echo "1. Update API keys in /var/www/learnhub/backend/.env"
+echo "1. Update API keys in /var/www/britsyncai/backend/.env"
 echo "   - STRIPE_SECRET_KEY"
 echo "   - STRIPE_WEBHOOK_SECRET"
 echo "   - SENDGRID_API_KEY"
 echo "   - OPENAI_API_KEY (or EMERGENT_LLM_KEY)"
 echo ""
 echo "2. After updating .env, restart backend:"
-echo "   pm2 restart learnhub-backend"
+echo "   pm2 restart britsyncai-backend"
 echo ""
 echo "3. Create an admin user (see DEPLOYMENT_GUIDE.md)"
 echo ""
@@ -325,5 +325,5 @@ echo "  pm2 logs               - View backend logs"
 echo "  sudo systemctl status nginx  - Check Nginx status"
 echo "  sudo certbot renew     - Renew SSL certificate"
 echo ""
-print_info "For detailed documentation, see /var/www/learnhub/DEPLOYMENT_GUIDE.md"
+print_info "For detailed documentation, see /var/www/britsyncai/DEPLOYMENT_GUIDE.md"
 echo ""
