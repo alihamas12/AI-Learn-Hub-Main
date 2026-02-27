@@ -9,8 +9,9 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function EditQuizForm({ quiz, onClose, onSuccess }) {
+export default function EditQuizForm({ quiz, sections = [], onClose, onSuccess }) {
     const [title, setTitle] = useState(quiz.title || '');
+    const [sectionId, setSectionId] = useState(quiz.section_id || '');
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -28,6 +29,7 @@ export default function EditQuizForm({ quiz, onClose, onSuccess }) {
             }));
             setQuestions(convertedQuestions);
             setTitle(quiz.title || '');
+            setSectionId(quiz.section_id || '');
         }
     }, [quiz]);
 
@@ -105,6 +107,7 @@ export default function EditQuizForm({ quiz, onClose, onSuccess }) {
 
             await axios.patch(`${API}/quizzes/${quiz.id}`, {
                 title,
+                section_id: sectionId || null,
                 questions: cleanedQuestions
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -140,6 +143,24 @@ export default function EditQuizForm({ quiz, onClose, onSuccess }) {
                             placeholder="Module 1 Quiz"
                             required
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <Label htmlFor="section">Assign to Section (Optional)</Label>
+                        <select
+                            id="section"
+                            value={sectionId}
+                            onChange={(e) => setSectionId(e.target.value)}
+                            className="w-full p-2 border rounded-md bg-white h-10"
+                            data-testid="edit-quiz-section-select"
+                        >
+                            <option value="">No Section (Standalone)</option>
+                            {sections.map(section => (
+                                <option key={section.id} value={section.id}>
+                                    {section.title}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="questions-section">

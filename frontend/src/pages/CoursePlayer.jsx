@@ -36,10 +36,12 @@ export default function CoursePlayer({ user, logout }) {
   const [liveClasses, setLiveClasses] = useState([]);
   const [certificates, setCertificates] = useState([]);
   const [enrollment, setEnrollment] = useState(null);
+  const [sections, setSections] = useState([]);
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [currentView, setCurrentView] = useState('lesson'); // 'lesson' | 'quiz' | 'live-classes' | 'certificate'
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [completedLessons, setCompletedLessons] = useState(new Set());
+  const [passedQuizzes, setPassedQuizzes] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [showAITutor, setShowAITutor] = useState(false);
   const [tutorMessages, setTutorMessages] = useState([]);
@@ -58,18 +60,31 @@ export default function CoursePlayer({ user, logout }) {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
 
-      const [courseRes, lessonsRes, quizzesRes, liveClassesRes, certificatesRes, enrollmentsRes] = await Promise.all([
+      const [courseRes, sectionsRes, liveClassesRes, certificatesRes, enrollmentsRes] = await Promise.all([
         axios.get(`${API}/courses/${id}`, { headers }),
-        axios.get(`${API}/courses/${id}/lessons`, { headers }),
-        axios.get(`${API}/quizzes/${id}`, { headers }),
+        axios.get(`${API}/courses/${id}/sections`, { headers }),
         axios.get(`${API}/courses/${id}/live-classes`, { headers }),
         axios.get(`${API}/certificates/my-certificates`, { headers }),
         axios.get(`${API}/enrollments/my-courses`, { headers })
       ]);
 
+      const fetchedSections = sectionsRes.data;
       setCourse(courseRes.data);
-      setLessons(lessonsRes.data);
-      setQuizzes(quizzesRes.data);
+      setSections(fetchedSections);
+
+      // Flatten lessons for navigation
+      const allLessons = fetchedSections.flatMap(s => s.lessons || []);
+      setLessons(allLessons);
+
+      // Collect passed quizzes
+      const passed = new Set();
+      fetchedSections.forEach(s => {
+        (s.quizzes || []).forEach(q => {
+          if (q.passed) passed.add(q.id);
+        });
+      });
+      setPassedQuizzes(passed);
+
       setLiveClasses(liveClassesRes.data);
 
       const myCertificates = certificatesRes.data.filter(c => c.course_id === id);
@@ -101,8 +116,8 @@ export default function CoursePlayer({ user, logout }) {
       setCompletedLessons(validLessons);
 
       // Sync progress if it doesn't match actual completed lessons
-      const actualProgress = lessonsRes.data.length > 0
-        ? (validLessons.size / lessonsRes.data.length) * 100
+      const actualProgress = allLessons.length > 0
+        ? (validLessons.size / allLessons.length) * 100
         : 0;
       const storedProgress = currentEnrollment.progress || 0;
 
@@ -271,20 +286,12 @@ export default function CoursePlayer({ user, logout }) {
           {/* Sidebar Tabs */}
           <div className="sidebar-tabs">
             <button
-              className={`sidebar-tab ${currentView === 'lesson' ? 'active' : ''}`}
+              className={`sidebar-tab ${currentView === 'lesson' || currentView === 'quiz-player' ? 'active' : ''}`}
               onClick={() => setCurrentView('lesson')}
               data-testid="lessons-tab"
             >
               <BookOpen size={18} />
-              Lessons
-            </button>
-            <button
-              className={`sidebar-tab ${currentView === 'quiz' ? 'active' : ''}`}
-              onClick={() => setCurrentView('quiz')}
-              data-testid="quizzes-tab"
-            >
-              <HelpCircle size={18} />
-              Quizzes ({quizzes.length})
+              Course Content
             </button>
             <button
               className={`sidebar-tab ${currentView === 'live-classes' ? 'active' : ''}`}
@@ -299,60 +306,73 @@ export default function CoursePlayer({ user, logout }) {
           <ScrollArea className="lessons-scroll">
             {currentView === 'lesson' && (
               <div className="lessons-list">
-                {lessons.map((lesson, index) => (
-                  <div
-                    key={lesson.id}
-                    data-testid={`lesson-item-${lesson.id}`}
-                    className={`lesson-item ${index === currentLessonIndex ? 'active' : ''
-                      } ${completedLessons.has(lesson.id) ? 'completed' : ''}`}
-                    onClick={() => setCurrentLessonIndex(index)}
-                  >
-                    <div className="lesson-status">
-                      {completedLessons.has(lesson.id) ? (
-                        <CheckCircle className="icon-completed" size={20} />
-                      ) : (
-                        <Circle className="icon-pending" size={20} />
-                      )}
-                    </div>
-                    <div className="lesson-info">
-                      <div className="lesson-number">Lesson {index + 1}</div>
-                      <div className="lesson-title">{lesson.title}</div>
-                      <div className="lesson-meta">
-                        {getLessonIcon(lesson.type)}
-                        <span>{lesson.type}</span>
-                        {lesson.duration && <span>{lesson.duration} min</span>}
+                {sections.map((section) => (
+                  <div key={section.id} className="section-group">
+                    <div className="section-title-sidebar">{section.title}</div>
+
+                    {/* Lessons in section */}
+                    {(section.lessons || []).map((lesson) => {
+                      const globalIndex = lessons.findIndex(l => l.id === lesson.id);
+                      return (
+                        <div
+                          key={lesson.id}
+                          data-testid={`lesson-item-${lesson.id}`}
+                          className={`lesson-item ${globalIndex === currentLessonIndex ? 'active' : ''
+                            } ${completedLessons.has(lesson.id) ? 'completed' : ''}`}
+                          onClick={() => {
+                            setCurrentLessonIndex(globalIndex);
+                            setCurrentView('lesson');
+                          }}
+                        >
+                          <div className="lesson-status">
+                            {completedLessons.has(lesson.id) ? (
+                              <CheckCircle className="icon-completed" size={20} />
+                            ) : (
+                              <Circle className="icon-pending" size={20} />
+                            )}
+                          </div>
+                          <div className="lesson-info">
+                            <div className="lesson-title">{lesson.title}</div>
+                            <div className="lesson-meta">
+                              {getLessonIcon(lesson.type)}
+                              <span>{lesson.type}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {/* Quizzes in section */}
+                    {(section.quizzes || []).map((quiz) => (
+                      <div
+                        key={quiz.id}
+                        className={`lesson-item quiz-item-sidebar ${selectedQuiz?.id === quiz.id ? 'active' : ''} ${passedQuizzes.has(quiz.id) ? 'completed' : ''}`}
+                        onClick={() => {
+                          setSelectedQuiz(quiz);
+                          setCurrentView('quiz-player');
+                        }}
+                      >
+                        <div className="lesson-status">
+                          {passedQuizzes.has(quiz.id) ? (
+                            <CheckCircle className="icon-completed" size={20} style={{ color: '#10b981' }} />
+                          ) : (
+                            <HelpCircle className="icon-pending" size={20} style={{ color: '#6366f1' }} />
+                          )}
+                        </div>
+                        <div className="lesson-info text-indigo-600">
+                          <div className="lesson-title font-bold">Quiz: {quiz.title}</div>
+                          <div className="lesson-meta">
+                            <span>{quiz.questions?.length || 0} Questions</span>
+                            {quiz.passed && <span className="text-green-600 ml-2">(Passed)</span>}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
                 ))}
               </div>
             )}
 
-            {currentView === 'quiz' && (
-              <div className="quizzes-list">
-                {quizzes.length === 0 ? (
-                  <div className="empty-view">No quizzes available</div>
-                ) : (
-                  quizzes.map((quiz) => (
-                    <div
-                      key={quiz.id}
-                      className="quiz-item"
-                      onClick={() => {
-                        setSelectedQuiz(quiz);
-                        setCurrentView('quiz-player');
-                      }}
-                      data-testid={`quiz-item-${quiz.id}`}
-                    >
-                      <HelpCircle size={20} className="quiz-icon" />
-                      <div>
-                        <div className="quiz-title">{quiz.title}</div>
-                        <div className="quiz-meta">{quiz.questions.length} questions</div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
 
             {currentView === 'live-classes' && (
               <div className="live-classes-list-sidebar">
@@ -377,22 +397,28 @@ export default function CoursePlayer({ user, logout }) {
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    setCurrentView('quiz');
+                    setCurrentView('lesson');
                     setSelectedQuiz(null);
                   }}
                 >
-                  Back to Quizzes
+                  Back to Sections
                 </Button>
               </div>
               <div className="quiz-player-content">
                 <QuizPlayer
                   quiz={selectedQuiz}
+                  courseId={id}
                   onComplete={(score) => {
                     toast.success(`Quiz completed! Score: ${score}%`);
+                    if (score >= 70) {
+                      setPassedQuizzes(prev => new Set([...prev, selectedQuiz.id]));
+                      // Optionally refresh course data for certificate
+                      fetchCourseData();
+                    }
                     setTimeout(() => {
-                      setCurrentView('quiz');
+                      setCurrentView('lesson');
                       setSelectedQuiz(null);
-                    }, 3000);
+                    }, 2000);
                   }}
                 />
               </div>

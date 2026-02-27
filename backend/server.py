@@ -211,6 +211,7 @@ class Quiz(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     course_id: str
+    section_id: Optional[str] = None
     title: str
     questions: List[Dict[str, Any]]  # [{question, options, correct_answer}]
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -1214,7 +1215,7 @@ async def get_sections(course_id: str, request: Request):
             if not is_authorized:
                 is_authorized = await check_enrollment_status(current_user.id, course_id)
     
-    # Get lessons for each section
+    # Get lessons and quizzes for each section
     for section in sections:
         lessons = await db.lessons.find({"section_id": section['id']}, {"_id": 0}).sort("order", 1).to_list(1000)
         # Filter content for non-enrolled users
@@ -1225,8 +1226,48 @@ async def get_sections(course_id: str, request: Request):
                 if lesson.get('type') == 'video':
                     lesson['duration'] = 0 # Hide duration if preferred
         section['lessons'] = lessons
+        
+        # New: Get quizzes for this section
+        quizzes = await db.quizzes.find({"section_id": section['id']}, {"_id": 0}).to_list(1000)
+        if current_user:
+            for quiz in quizzes:
+                result = await db.quiz_results.find_one({
+                    "user_id": current_user.id,
+                    "quiz_id": quiz['id']
+                })
+                quiz['passed'] = (result['score'] >= 70) if result else False
+                quiz['last_score'] = result['score'] if result else None
+        section['quizzes'] = quizzes
+    
+    # NEW: Handle standalone content (lessons and quizzes without section_id)
+    standalone_lessons = await db.lessons.find({"course_id": course_id, "section_id": {"$in": [None, ""]}}, {"_id": 0}).sort("order", 1).to_list(1000)
+    for lesson in standalone_lessons:
+        if not is_authorized and not lesson.get('is_preview', False):
+            lesson['content_url'] = None
+            lesson['content_text'] = "Private content. Enroll to view."
+            
+    standalone_quizzes = await db.quizzes.find({"course_id": course_id, "section_id": {"$in": [None, ""]}}, {"_id": 0}).to_list(1000)
+    if current_user:
+        for quiz in standalone_quizzes:
+            result = await db.quiz_results.find_one({
+                "user_id": current_user.id,
+                "quiz_id": quiz['id']
+            })
+            quiz['passed'] = (result['score'] >= 70) if result else False
+            quiz['last_score'] = result['score'] if result else None
+
+    # If standalone content exists, add it as a pseudo-section
+    if standalone_lessons or standalone_quizzes:
+        sections.append({
+            "id": "standalone",
+            "title": "General Content",
+            "order": 999,
+            "lessons": standalone_lessons,
+            "quizzes": standalone_quizzes
+        })
     
     return sections
+
 
 
 @api_router.delete("/sections/{section_id}")
@@ -1735,10 +1776,17 @@ async def create_checkout(
 
     final_price = max(0.0, original_price - discount_amount)
     print(f"[DEBUG] Checkout Final Calculation - Original: {original_price}, Discount: {discount_amount}, Final: {final_price}")
-    
-    host_url = str(request.base_url).rstrip('/')
-    frontend_url = os.environ.get('FRONTEND_URL', host_url).rstrip('/')
-    
+    # Detect base URL for redirects
+    frontend_url = os.environ.get('FRONTEND_URL')
+    if not frontend_url:
+        # Fallback to origin or base_url
+        origin = request.headers.get('Origin')
+        if origin:
+            frontend_url = origin.rstrip('/')
+        else:
+            frontend_url = str(request.base_url).rstrip('/')
+    else:
+        frontend_url = frontend_url.rstrip('/')
     # SPECIAL HANDLING FOR FREE COURSES (Price 0 or 100% Discount)
     if final_price <= 0:
         # Generate internal session ID
@@ -1836,8 +1884,11 @@ async def create_checkout(
     
     session = await stripe_checkout.create_checkout_session(
         checkout_request, 
-        instructor_stripe_account_id=instructor_stripe_id
+        instructor_stripe_account_id=instructor_stripe_id,
+        platform_fee_percent=ADMIN_COMMISSION
     )
+    
+    print(f"[DEBUG] Created checkout session: {session.session_id}, redirecting to: {session.url}")
     
     # Create payment record
     payment = Payment(
@@ -2404,7 +2455,8 @@ async def create_quiz(quiz_data: dict, current_user: User = Depends(get_current_
     
     quiz = Quiz(**quiz_data)
     doc = quiz.model_dump()
-    doc['created_at'] = doc['created_at'].isoformat()
+    if 'created_at' in doc and isinstance(doc['created_at'], datetime):
+        doc['created_at'] = doc['created_at'].isoformat()
     await db.quizzes.insert_one(doc)
     return quiz
 
@@ -2482,6 +2534,8 @@ async def update_quiz(quiz_id: str, quiz_data: dict, current_user: User = Depend
         update_data['title'] = quiz_data['title']
     if 'questions' in quiz_data:
         update_data['questions'] = quiz_data['questions']
+    if 'section_id' in quiz_data:
+        update_data['section_id'] = quiz_data['section_id']
     
     if not update_data:
         return quiz
@@ -2504,7 +2558,8 @@ async def submit_quiz(quiz_id: str, answers: List[int], current_user: User = Dep
         if i < len(quiz['questions']) and quiz['questions'][i]['correct_answer'] == answer:
             correct += 1
     
-    score = (correct / len(quiz['questions'])) * 100 if quiz['questions'] else 0
+    total_questions = len(quiz.get('questions', []))
+    score = (correct / total_questions) * 100 if total_questions > 0 else 100
     
     # Save result
     result = QuizResult(

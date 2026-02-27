@@ -44,7 +44,8 @@ class StripeCheckout:
     async def create_checkout_session(
         self, 
         request: CheckoutSessionRequest,
-        instructor_stripe_account_id: Optional[str] = None
+        instructor_stripe_account_id: Optional[str] = None,
+        platform_fee_percent: float = 0.10
     ) -> CheckoutSessionResponse:
         """Create a Stripe checkout session with optional payment splitting"""
         try:
@@ -72,8 +73,8 @@ class StripeCheckout:
             
             # Add payment splitting if instructor has Stripe account connected
             if instructor_stripe_account_id:
-                # Calculate platform fee (10%)
-                platform_fee_cents = int(amount_cents * 0.10)
+                # Calculate platform fee (dynamic from platform config)
+                platform_fee_cents = int(amount_cents * platform_fee_percent)
                 
                 # Configure payment to split: 90% to instructor, 10% to platform
                 session_params["payment_intent_data"] = {

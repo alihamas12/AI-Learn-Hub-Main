@@ -9,13 +9,13 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-export default function AddQuizForm({ courseId, onClose, onSuccess }) {
+export default function AddQuizForm({ courseId, sections = [], onClose, onSuccess }) {
   const [title, setTitle] = useState('');
+  const [sectionId, setSectionId] = useState('');
   const [questions, setQuestions] = useState([
     { question: '', questionType: 'single', numOptions: 4, options: ['', '', '', ''], correct_answer: 0 }
   ]);
   const [loading, setLoading] = useState(false);
-
   const addQuestion = () => {
     setQuestions([...questions, { question: '', questionType: 'single', numOptions: 4, options: ['', '', '', ''], correct_answer: 0 }]);
   };
@@ -61,7 +61,6 @@ export default function AddQuizForm({ courseId, onClose, onSuccess }) {
     newQuestions[qIndex].numOptions = clampedNum;
     newQuestions[qIndex].options = newOptions;
 
-    // Reset correct answer if it's out of bounds
     if (newQuestions[qIndex].correct_answer >= clampedNum) {
       newQuestions[qIndex].correct_answer = 0;
     }
@@ -90,6 +89,7 @@ export default function AddQuizForm({ courseId, onClose, onSuccess }) {
 
       await axios.post(`${API}/quizzes`, {
         course_id: courseId,
+        section_id: sectionId || null,
         title,
         questions: cleanedQuestions
       }, {
@@ -126,6 +126,24 @@ export default function AddQuizForm({ courseId, onClose, onSuccess }) {
               placeholder="Module 1 Quiz"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <Label htmlFor="section">Assign to Section (Optional)</Label>
+            <select
+              id="section"
+              value={sectionId}
+              onChange={(e) => setSectionId(e.target.value)}
+              className="w-full p-2 border rounded-md bg-white h-10"
+              data-testid="quiz-section-select"
+            >
+              <option value="">No Section (Standalone)</option>
+              {sections.map(section => (
+                <option key={section.id} value={section.id}>
+                  {section.title}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="questions-section">

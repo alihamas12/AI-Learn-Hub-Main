@@ -365,33 +365,73 @@ export default function ManageCourse({ user, logout }) {
                         </div>
                       </div>
 
-                      {section.lessons && section.lessons.length > 0 ? (
-                        <div className="section-lessons">
-                          <LessonsList
-                            lessons={section.lessons}
-                            courseId={id}
-                            onRefresh={fetchCourseData}
-                            onEdit={(lesson) => setEditingLesson(lesson)}
-                          />
+                      {(section.lessons && section.lessons.length > 0) || quizzes.some(q => q.section_id === section.id) ? (
+                        <div className="section-content">
+                          {section.lessons && section.lessons.length > 0 && (
+                            <div className="section-lessons">
+                              <LessonsList
+                                lessons={section.lessons}
+                                courseId={id}
+                                onRefresh={fetchCourseData}
+                                onEdit={(lesson) => setEditingLesson(lesson)}
+                              />
+                            </div>
+                          )}
+                          {quizzes.filter(q => q.section_id === section.id).map(quiz => (
+                            <div key={quiz.id} className="quiz-item-nested" data-testid={`section-quiz-${quiz.id}`}>
+                              <div className="flex items-center">
+                                <HelpCircle size={18} className="text-indigo-500 mr-2" />
+                                <span>Quiz: {quiz.title}</span>
+                              </div>
+                              <div className="flex gap-1">
+                                <Button variant="ghost" size="sm" onClick={() => setEditingQuiz(quiz)}>
+                                  <Edit size={14} />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => handleDeleteQuiz(quiz.id)}>
+                                  <Trash2 size={14} className="text-red-500" />
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       ) : (
-                        <div className="empty-section">No lessons in this section yet</div>
+                        <div className="empty-section">No content in this section yet</div>
                       )}
                     </div>
                   ))}
 
-                  {lessons.filter(l => !l.section_id).length > 0 && (
-                    <div className="section-block">
+                  {(lessons.filter(l => !l.section_id).length > 0 || quizzes.filter(q => !q.section_id).length > 0) && (
+                    <div className="section-block standalone-block">
                       <div className="section-header-block">
-                        <h3>Standalone Lessons</h3>
+                        <h3>Standalone Content</h3>
                       </div>
-                      <div className="section-lessons">
-                        <LessonsList
-                          lessons={lessons.filter(l => !l.section_id)}
-                          courseId={id}
-                          onRefresh={fetchCourseData}
-                          onEdit={(lesson) => setEditingLesson(lesson)}
-                        />
+                      <div className="section-content">
+                        {lessons.filter(l => !l.section_id).length > 0 && (
+                          <div className="section-lessons">
+                            <LessonsList
+                              lessons={lessons.filter(l => !l.section_id)}
+                              courseId={id}
+                              onRefresh={fetchCourseData}
+                              onEdit={(lesson) => setEditingLesson(lesson)}
+                            />
+                          </div>
+                        )}
+                        {quizzes.filter(q => !q.section_id).map(quiz => (
+                          <div key={quiz.id} className="quiz-item-nested" data-testid={`standalone-quiz-${quiz.id}`}>
+                            <div className="flex items-center">
+                              <HelpCircle size={18} className="text-indigo-500 mr-2" />
+                              <span>Quiz: {quiz.title}</span>
+                            </div>
+                            <div className="flex gap-1">
+                              <Button variant="ghost" size="sm" onClick={() => setEditingQuiz(quiz)}>
+                                <Edit size={14} />
+                              </Button>
+                              <Button variant="ghost" size="sm" onClick={() => handleDeleteQuiz(quiz.id)}>
+                                <Trash2 size={14} className="text-red-500" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -650,6 +690,7 @@ export default function ManageCourse({ user, logout }) {
         showAddQuiz && (
           <AddQuizForm
             courseId={id}
+            sections={sections}
             onClose={() => setShowAddQuiz(false)}
             onSuccess={() => {
               setShowAddQuiz(false);
@@ -662,6 +703,7 @@ export default function ManageCourse({ user, logout }) {
         editingQuiz && (
           <EditQuizForm
             quiz={editingQuiz}
+            sections={sections}
             onClose={() => setEditingQuiz(null)}
             onSuccess={() => {
               setEditingQuiz(null);
