@@ -9,6 +9,7 @@ import EditLessonForm from '@/components/instructor/EditLessonForm';
 import AddSectionForm from '@/components/instructor/AddSectionForm';
 import EditSectionForm from '@/components/instructor/EditSectionForm';
 import AddLiveClassForm from '@/components/instructor/AddLiveClassForm';
+import AddQuizForm from '@/components/instructor/AddQuizForm';
 import EditQuizForm from '@/components/instructor/EditQuizForm';
 import LessonsList from '@/components/instructor/LessonsList';
 import EditCourseDetailsModal from '@/components/instructor/EditCourseDetailsModal';
