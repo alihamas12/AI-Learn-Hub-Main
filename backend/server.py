@@ -2193,9 +2193,7 @@ async def upload_thumbnail(file: UploadFile = File(...), current_user: User = De
     if current_user.role not in ["instructor", "admin"]:
         raise HTTPException(status_code=403, detail="Instructor only")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
-    
+    # No file type or size restrictions - accept any image
     try:
         file_extension = Path(file.filename).suffix
         if not file_extension:

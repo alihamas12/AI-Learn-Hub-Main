@@ -121,11 +121,6 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
-      return;
-    }
-
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
 
@@ -139,7 +134,7 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
         }
       });
 
-      setFormData(prev => ({ ...prev, thumbnail: `${BACKEND_URL}${response.data.url}` }));
+      setFormData(prev => ({ ...prev, thumbnail: response.data.url })); // store relative path only
       toast.success('Thumbnail uploaded successfully!');
     } catch (error) {
       toast.error('Failed to upload thumbnail');

@@ -180,11 +180,6 @@ export default function ManageCourse({ user, logout }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
-      return;
-    }
-
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
 
@@ -200,9 +195,10 @@ export default function ManageCourse({ user, logout }) {
         }
       });
 
-      const thumbnailUrl = `${BACKEND_URL}${uploadRes.data.url}`;
+      // Store the relative URL path (not localhost URL) so it works on production
+      const thumbnailUrl = uploadRes.data.url; // e.g. /uploads/thumbnails/xxx.png
 
-      // Update the course with new thumbnail
+      // Update the course with new thumbnail (stores relative path)
       await axios.patch(`${API}/courses/${id}`, { thumbnail: thumbnailUrl }, {
         headers: { Authorization: `Bearer ${token}` }
       });
