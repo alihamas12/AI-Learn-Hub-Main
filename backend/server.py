@@ -1580,9 +1580,16 @@ async def create_coupon(coupon_data: dict, current_user: User = Depends(get_curr
     if existing:
         raise HTTPException(status_code=400, detail="Coupon code already exists")
     
-    # Parse dates
-    valid_from = datetime.fromisoformat(coupon_data['valid_from'])
-    valid_until = datetime.fromisoformat(coupon_data['valid_until'])
+    # Parse dates - always store as UTC to avoid timezone confusion
+    def parse_date_as_utc(date_str: str) -> datetime:
+        dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        if dt.tzinfo is None:
+            # Treat naive datetime as UTC
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    
+    valid_from = parse_date_as_utc(coupon_data['valid_from'])
+    valid_until = parse_date_as_utc(coupon_data['valid_until'])
     
     coupon = Coupon(
         code=coupon_data['code'].upper(),
@@ -1596,8 +1603,8 @@ async def create_coupon(coupon_data: dict, current_user: User = Depends(get_curr
     )
     
     doc = coupon.model_dump()
-    doc['valid_from'] = doc['valid_from'].isoformat()
-    doc['valid_until'] = doc['valid_until'].isoformat()
+    doc['valid_from'] = valid_from.isoformat()
+    doc['valid_until'] = valid_until.isoformat()
     doc['created_at'] = doc['created_at'].isoformat()
     await db.coupons.insert_one(doc)
     
