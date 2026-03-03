@@ -1776,17 +1776,12 @@ async def create_checkout(
 
     final_price = max(0.0, original_price - discount_amount)
     print(f"[DEBUG] Checkout Final Calculation - Original: {original_price}, Discount: {discount_amount}, Final: {final_price}")
-    # Detect base URL for redirects
-    frontend_url = os.environ.get('FRONTEND_URL')
+    # Detect frontend URL for redirects (always use production domain as fallback)
+    PRODUCTION_FRONTEND_URL = "https://britsyncaiacademy.online"
+    frontend_url = os.environ.get('FRONTEND_URL', PRODUCTION_FRONTEND_URL).rstrip('/')
+    # If env var is empty string, also use production URL
     if not frontend_url:
-        # Fallback to origin or base_url
-        origin = request.headers.get('Origin')
-        if origin:
-            frontend_url = origin.rstrip('/')
-        else:
-            frontend_url = str(request.base_url).rstrip('/')
-    else:
-        frontend_url = frontend_url.rstrip('/')
+        frontend_url = PRODUCTION_FRONTEND_URL
     # SPECIAL HANDLING FOR FREE COURSES (Price 0 or 100% Discount)
     if final_price <= 0:
         # Generate internal session ID
@@ -1835,7 +1830,7 @@ async def create_checkout(
         return {"url": success_url, "session_id": session_id}
 
     host_url = str(request.base_url).rstrip('/')
-    frontend_url = os.environ.get('FRONTEND_URL', host_url).rstrip('/')
+    # Use same frontend_url already determined above (production domain)
     webhook_url = f"{host_url}/api/webhook/stripe"
     
     stripe_key = os.environ.get('STRIPE_SECRET_KEY')
@@ -2998,7 +2993,9 @@ async def payment_success_redirect(session_id: str):
     Handle Stripe redirect to backend and forward to frontend.
     This fixes the 404 error when FRONTEND_URL is not directly used in success_url.
     """
-    frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://britsyncaiacademy.online').rstrip('/')
+    if not frontend_url:
+        frontend_url = 'https://britsyncaiacademy.online'
     logger.info(f"Redirecting success session {session_id} to {frontend_url}")
     return RedirectResponse(url=f"{frontend_url}/payment/success?session_id={session_id}")
 
@@ -3006,7 +3003,9 @@ async def payment_success_redirect(session_id: str):
 @app.get("/payment/cancel")
 async def payment_cancel_redirect():
     """Handle Stripe cancel redirect to backend and forward to frontend."""
-    frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+    frontend_url = os.environ.get('FRONTEND_URL', 'https://britsyncaiacademy.online').rstrip('/')
+    if not frontend_url:
+        frontend_url = 'https://britsyncaiacademy.online'
     logger.info(f"Redirecting cancellation to {frontend_url}")
     return RedirectResponse(url=f"{frontend_url}/payment/cancel")
 
@@ -3053,7 +3052,7 @@ async def unsubscribe_newsletter(token: str):
         if result.modified_count == 0:
             raise HTTPException(status_code=404, detail="Invalid token")
         
-        frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
+        frontend_url = os.environ.get('FRONTEND_URL', 'https://britsyncaiacademy.online')
         return RedirectResponse(url=f"{frontend_url}/unsubscribe-success")
     except HTTPException:
         raise
