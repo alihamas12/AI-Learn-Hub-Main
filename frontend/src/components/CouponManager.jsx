@@ -46,8 +46,14 @@ export default function CouponManager() {
 
     const token = localStorage.getItem('token');
     try {
+      // Convert local datetime inputs to UTC ISO strings to avoid timezone issues
+      const validFrom = formData.valid_from ? new Date(formData.valid_from).toISOString() : null;
+      const validUntil = formData.valid_until ? new Date(formData.valid_until).toISOString() : null;
+
       await axios.post(`${API}/coupons`, {
         ...formData,
+        valid_from: validFrom,
+        valid_until: validUntil,
         discount_value: parseFloat(formData.discount_value),
         usage_limit: formData.usage_limit ? parseInt(formData.usage_limit) : null
       }, {

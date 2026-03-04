@@ -111,7 +111,7 @@ export default function CoursePlayer({ user, logout }) {
 
       // Filter out lessons that no longer exist
       const validLessons = new Set(
-        [...backendLessons].filter(lessonId => lessonsRes.data.some(l => l.id === lessonId))
+        [...backendLessons].filter(lessonId => allLessons.some(l => l.id === lessonId))
       );
       setCompletedLessons(validLessons);
 
@@ -477,7 +477,17 @@ export default function CoursePlayer({ user, logout }) {
                     {currentLesson.content_url ? (
                       currentLesson.content_url.includes('youtube.com') || currentLesson.content_url.includes('youtu.be') ? (
                         <iframe
-                          src={currentLesson.content_url.replace('watch?v=', 'embed/')}
+                          src={(() => {
+                            const url = currentLesson.content_url;
+                            if (url.includes('youtu.be/')) {
+                              const videoId = url.split('youtu.be/')[1]?.split('?')[0];
+                              return `https://www.youtube.com/embed/${videoId}`;
+                            }
+                            if (url.includes('watch?v=')) {
+                              return url.replace('watch?v=', 'embed/');
+                            }
+                            return url;
+                          })()}
                           title={currentLesson.title}
                           allowFullScreen
                           className="video-iframe"

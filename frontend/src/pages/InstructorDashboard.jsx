@@ -51,7 +51,7 @@ export default function InstructorDashboard({ user, logout }) {
         if (!activeInstructor) { setLoading(false); return; }
       }
       setInstructor(activeInstructor);
-      const coursesRes = await axios.get(`${API}/courses?instructor_id=${activeInstructor.id}&status=all&token=${token}`, { headers });
+      const coursesRes = await axios.get(`${API}/courses?instructor_id=${activeInstructor.id}&status=all`, { headers });
       const myCourses = coursesRes.data;
       setCourses(myCourses);
       const publishedCourses = myCourses.filter(c => c.status === 'published');

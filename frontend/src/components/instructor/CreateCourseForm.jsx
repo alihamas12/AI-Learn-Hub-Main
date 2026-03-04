@@ -369,7 +369,6 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
                     <input
                       id="thumb-upload"
                       type="file"
-                      accept="image/*"
                       onChange={handleThumbnailUpload}
                       style={{ display: 'none' }}
                     />

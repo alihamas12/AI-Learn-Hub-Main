@@ -558,7 +558,6 @@ export default function ManageCourse({ user, logout }) {
                     <input
                       id="thumbnail-upload"
                       type="file"
-                      accept="image/*"
                       onChange={handleThumbnailUpload}
                       style={{ display: 'none' }}
                     />

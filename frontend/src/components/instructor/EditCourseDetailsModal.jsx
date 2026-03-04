@@ -164,7 +164,7 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            setFormData(prev => ({ ...prev, thumbnail: `${BACKEND_URL}${response.data.url}` }));
+            setFormData(prev => ({ ...prev, thumbnail: response.data.url })); // store relative path only
             toast.success('Thumbnail uploaded!');
         } catch (error) {
             toast.error('Upload failed');
@@ -404,7 +404,7 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity backdrop-blur-sm">
                                             <Plus size={24} />
                                         </div>
-                                        <input id="edit-thumb-in" type="file" hidden onChange={handleThumbnailUpload} accept="image/*" />
+                                        <input id="edit-thumb-in" type="file" hidden onChange={handleThumbnailUpload} />
                                     </div>
                                     <div className="col-span-2 space-y-4">
                                         <div className="space-y-1">
