@@ -1783,12 +1783,15 @@ async def create_checkout(
 
     final_price = max(0.0, original_price - discount_amount)
     print(f"[DEBUG] Checkout Final Calculation - Original: {original_price}, Discount: {discount_amount}, Final: {final_price}")
-    # Detect frontend URL for redirects (always use production domain as fallback)
+    # Always use production domain - hardcoded as the authoritative URL
     PRODUCTION_FRONTEND_URL = "https://britsyncaiacademy.online"
-    frontend_url = os.environ.get('FRONTEND_URL', PRODUCTION_FRONTEND_URL).rstrip('/')
-    # If env var is empty string, also use production URL
-    if not frontend_url:
+    env_frontend = os.environ.get('FRONTEND_URL', '').rstrip('/')
+    # Reject localhost/127.0.0.1 values (dev values accidentally set on production)
+    if env_frontend and 'localhost' not in env_frontend and '127.0.0.1' not in env_frontend:
+        frontend_url = env_frontend
+    else:
         frontend_url = PRODUCTION_FRONTEND_URL
+    print(f"[DEBUG] Using frontend_url: {frontend_url}")
     # SPECIAL HANDLING FOR FREE COURSES (Price 0 or 100% Discount)
     if final_price <= 0:
         # Generate internal session ID
@@ -3000,9 +3003,8 @@ async def payment_success_redirect(session_id: str):
     Handle Stripe redirect to backend and forward to frontend.
     This fixes the 404 error when FRONTEND_URL is not directly used in success_url.
     """
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://britsyncaiacademy.online').rstrip('/')
-    if not frontend_url:
-        frontend_url = 'https://britsyncaiacademy.online'
+    _env_url = os.environ.get('FRONTEND_URL', '').rstrip('/')
+    frontend_url = _env_url if (_env_url and 'localhost' not in _env_url and '127.0.0.1' not in _env_url) else 'https://britsyncaiacademy.online'
     logger.info(f"Redirecting success session {session_id} to {frontend_url}")
     return RedirectResponse(url=f"{frontend_url}/payment/success?session_id={session_id}")
 
@@ -3010,9 +3012,8 @@ async def payment_success_redirect(session_id: str):
 @app.get("/payment/cancel")
 async def payment_cancel_redirect():
     """Handle Stripe cancel redirect to backend and forward to frontend."""
-    frontend_url = os.environ.get('FRONTEND_URL', 'https://britsyncaiacademy.online').rstrip('/')
-    if not frontend_url:
-        frontend_url = 'https://britsyncaiacademy.online'
+    _env_url = os.environ.get('FRONTEND_URL', '').rstrip('/')
+    frontend_url = _env_url if (_env_url and 'localhost' not in _env_url and '127.0.0.1' not in _env_url) else 'https://britsyncaiacademy.online'
     logger.info(f"Redirecting cancellation to {frontend_url}")
     return RedirectResponse(url=f"{frontend_url}/payment/cancel")
 
