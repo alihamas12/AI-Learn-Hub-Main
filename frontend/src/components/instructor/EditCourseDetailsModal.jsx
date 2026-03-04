@@ -33,6 +33,7 @@ import {
     HelpCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -394,7 +395,7 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
                                 <div className="grid grid-cols-3 gap-6">
                                     <div className="col-span-1 h-32 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-200 overflow-hidden relative group cursor-pointer" onClick={() => document.getElementById('edit-thumb-in').click()}>
                                         {formData.thumbnail ? (
-                                            <img src={formData.thumbnail} alt="Current" className="w-full h-full object-cover" />
+                                            <img src={getThumbnailUrl(formData.thumbnail)} alt="Current" className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
                                                 <ImageIcon size={24} />

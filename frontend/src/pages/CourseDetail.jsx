@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import Navbar from '@/components/Navbar';
 import CourseReviews from '@/components/student/CourseReviews';
 import {
@@ -205,7 +206,7 @@ export default function CourseDetail({ user, logout }) {
             <div className="w-full lg:w-[400px] shrink-0">
               <div className="aspect-video rounded-3xl overflow-hidden border-2 border-white/10 shadow-2xl group">
                 <img
-                  src={course.thumbnail || '/placeholder-course.png'}
+                  src={getThumbnailUrl(course.thumbnail)}
                   alt={course.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}

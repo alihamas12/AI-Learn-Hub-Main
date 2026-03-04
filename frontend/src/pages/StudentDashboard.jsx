@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import CertificateCard from '@/components/student/CertificateCard';
 import {
   BookOpen, Award, TrendingUp, AlertCircle, Clock, ArrowRight, Play,
@@ -150,7 +151,7 @@ export default function StudentDashboard({ user, logout }) {
                     <div className="flex gap-4 p-5">
                       <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-gradient-to-br from-indigo-100 to-violet-100">
                         <img
-                          src={enrollment.course?.thumbnail || '/placeholder-course.png'}
+                          src={getThumbnailUrl(enrollment.course?.thumbnail)}
                           alt={enrollment.course?.title}
                           className="w-full h-full object-cover"
                           onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}
@@ -206,7 +207,7 @@ export default function StudentDashboard({ user, logout }) {
                     <div className="flex gap-4 p-5">
                       <div className="relative w-20 h-20 rounded-2xl overflow-hidden shrink-0">
                         <img
-                          src={enrollment.course?.thumbnail || '/placeholder-course.png'}
+                          src={getThumbnailUrl(enrollment.course?.thumbnail)}
                           alt={enrollment.course?.title}
                           className="w-full h-full object-cover"
                           onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}

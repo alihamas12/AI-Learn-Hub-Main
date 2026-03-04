@@ -4,6 +4,7 @@ import axios from 'axios';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { BookOpen, User, Mail, Award } from 'lucide-react';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -108,7 +109,7 @@ export default function PublicProfile({ user: currentUser, logout }) {
                                             >
                                                 <div className="aspect-video relative overflow-hidden bg-gray-100">
                                                     <img
-                                                        src={course.thumbnail || '/placeholder-course.png'}
+                                                        src={getThumbnailUrl(course.thumbnail)}
                                                         alt={course.title}
                                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                     />

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '@/components/Navbar';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import BlogSection from '@/components/BlogSection';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import '@/components/Newsletter.css';
@@ -264,7 +265,7 @@ export default function LandingPage({ user, logout }) {
                 {/* Thumbnail */}
                 <div className="relative h-48 overflow-hidden bg-gradient-to-br from-indigo-100 to-violet-100">
                   <img
-                    src={course.thumbnail || '/placeholder-course.png'}
+                    src={getThumbnailUrl(course.thumbnail)}
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}

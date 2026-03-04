@@ -213,6 +213,13 @@ export default function ManageCourse({ user, logout }) {
     }
   };
 
+  // Helper: build full URL for thumbnails stored as relative paths on backend
+  const getThumbnailUrl = (thumbnail) => {
+    if (!thumbnail) return '/placeholder-course.png';
+    if (thumbnail.startsWith('http')) return thumbnail; // already absolute
+    return `${BACKEND_URL}${thumbnail}`; // prefix with Railway backend URL
+  };
+
   if (loading) return <div className="loading">Loading...</div>;
   if (!course) return <div>Course not found</div>;
 
@@ -546,7 +553,7 @@ export default function ManageCourse({ user, logout }) {
                 <div className="thumbnail-edit-container">
                   <div className="thumbnail-preview-large">
                     <img
-                      src={course.thumbnail || '/placeholder-course.png'}
+                      src={getThumbnailUrl(course.thumbnail)}
                       alt="Course thumbnail"
                       onError={(e) => {
                         e.target.onerror = null;

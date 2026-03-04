@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '@/components/Navbar';
 import { Search, SlidersHorizontal, Star, ArrowRight, BookOpen } from 'lucide-react';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -114,8 +115,8 @@ export default function CourseCatalog({ user, logout }) {
             <button
               onClick={() => setCategory('all')}
               className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${category === 'all'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
             >
               All
@@ -126,8 +127,8 @@ export default function CourseCatalog({ user, logout }) {
                 onClick={() => setCategory(cat)}
                 data-testid={`category-${cat.toLowerCase()}`}
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${category === cat
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-200'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
               >
                 {cat}
@@ -176,7 +177,7 @@ export default function CourseCatalog({ user, logout }) {
                 {/* Thumbnail */}
                 <div className="relative h-48 overflow-hidden bg-gradient-to-br from-indigo-100 to-violet-100">
                   <img
-                    src={course.thumbnail || '/placeholder-course.png'}
+                    src={getThumbnailUrl(course.thumbnail)}
                     alt={course.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}
