@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import Navbar from '@/components/Navbar';
 import QuizPlayer from '@/components/student/QuizPlayer';
 import LiveClassCard from '@/components/student/LiveClassCard';
+import CertificateCard from '@/components/student/CertificateCard';
 import {
   ChevronLeft,
   ChevronRight,
@@ -196,10 +197,8 @@ export default function CoursePlayer({ user, logout }) {
   };
 
   const downloadCertificate = (certificate) => {
-    // For now, show certificate info
-    // In production, this would generate a PDF or redirect to certificate page
-    toast.success('Certificate downloaded!');
-    window.open(`/certificate/${certificate.id}`, '_blank');
+    // Legacy function - CertificateCard handles its own downloads now
+    toast.info('Please use the download button on the certificate.');
   };
 
   const goToNextLesson = () => {
@@ -424,21 +423,15 @@ export default function CoursePlayer({ user, logout }) {
               </div>
             </div>
           ) : currentView === 'certificate' && certificates.length > 0 ? (
-            <div className="certificate-view">
-              <div className="certificate-display">
-                <Award size={80} className="certificate-main-icon" />
-                <h1>Certificate of Completion</h1>
-                <h2>{course.title}</h2>
-                <p className="recipient-name">{user.name}</p>
-                <p className="issue-date">Issued on {new Date(certificates[0].issued_date).toLocaleDateString()}</p>
-                <Button
-                  size="lg"
-                  onClick={() => downloadCertificate(certificates[0])}
-                  data-testid="download-certificate-btn"
-                >
-                  <Download size={20} className="mr-2" />
-                  Download Certificate
-                </Button>
+            <div className="certificate-view p-8">
+              <div className="max-w-4xl mx-auto">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-slate-800">Your Certificate</h2>
+                  <Button variant="outline" onClick={() => setCurrentView('lesson')}>
+                    Back to Course
+                  </Button>
+                </div>
+                <CertificateCard certificate={certificates[0]} />
               </div>
             </div>
           ) : (

@@ -251,7 +251,7 @@ export default function StudentDashboard({ user, logout }) {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {certificates.map((cert) => <CertificateCard key={cert.id} certificate={cert} />)}
+                {certificates.map((cert) => <CertificateCard key={cert.id || cert._id} certificate={cert} />)}
               </div>
             )}
           </TabsContent>

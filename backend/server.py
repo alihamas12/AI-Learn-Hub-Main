@@ -2721,13 +2721,17 @@ async def generate_certificate_if_eligible(user_id: str, course_id: str):
 @api_router.get("/certificates/my-certificates")
 async def get_my_certificates(current_user: User = Depends(get_current_user)):
     certificates = await db.certificates.find({"user_id": current_user.id}, {"_id": 0}).to_list(1000)
-    
+
     result = []
     for cert in certificates:
         course = await db.courses.find_one({"id": cert['course_id']}, {"_id": 0})
         if course:
-            result.append({**cert, "course": course})
-    
+            result.append({
+                **cert,
+                "course": course,
+                "user_name": current_user.name,  # inject real student name
+            })
+
     return result
 
 

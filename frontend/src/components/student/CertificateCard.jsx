@@ -1,105 +1,36 @@
-import React, { useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Download, Award, ExternalLink } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Download } from 'lucide-react';
 import { toast } from 'sonner';
-import logo from '../../Logo/logo-main.png';
-import signature from '../../Images/Signature.png';
+import logoSrc from '../../Logo/logo-main.png';
+import signatureSrc from '../../Images/Signature.png';
 
 // ─── Badge definitions ────────────────────────────────────────────────────────
 export const BADGES = [
-  {
-    id: 'first_course',
-    name: 'First Steps',
-    description: 'Completed your first course',
-    emoji: '🎯',
-    color: 'from-blue-400 to-blue-600',
-    border: 'border-blue-300',
-    bg: 'bg-blue-50',
-    text: 'text-blue-700',
-  },
-  {
-    id: 'fast_learner',
-    name: 'Fast Learner',
-    description: 'Completed a course in under 7 days',
-    emoji: '⚡',
-    color: 'from-yellow-400 to-orange-500',
-    border: 'border-yellow-300',
-    bg: 'bg-yellow-50',
-    text: 'text-yellow-700',
-  },
-  {
-    id: 'top_student',
-    name: 'Top Student',
-    description: 'Completed 3 or more courses',
-    emoji: '🏆',
-    color: 'from-amber-400 to-yellow-500',
-    border: 'border-amber-300',
-    bg: 'bg-amber-50',
-    text: 'text-amber-700',
-  },
-  {
-    id: 'knowledge_seeker',
-    name: 'Knowledge Seeker',
-    description: 'Completed 5+ courses',
-    emoji: '📚',
-    color: 'from-purple-400 to-indigo-600',
-    border: 'border-purple-300',
-    bg: 'bg-purple-50',
-    text: 'text-purple-700',
-  },
-  {
-    id: 'ai_expert',
-    name: 'AI Expert',
-    description: 'Completed an AI or ML course',
-    emoji: '🤖',
-    color: 'from-teal-400 to-cyan-600',
-    border: 'border-teal-300',
-    bg: 'bg-teal-50',
-    text: 'text-teal-700',
-  },
-  {
-    id: 'certified_pro',
-    name: 'Certified Pro',
-    description: 'Earned 3 certificates',
-    emoji: '🎓',
-    color: 'from-green-400 to-emerald-600',
-    border: 'border-green-300',
-    bg: 'bg-green-50',
-    text: 'text-green-700',
-  },
+  { id: 'first_course', name: 'First Steps', description: 'Completed your first course', emoji: '🎯', color: 'from-blue-400 to-blue-600' },
+  { id: 'fast_learner', name: 'Fast Learner', description: 'Completed a course quickly', emoji: '⚡', color: 'from-yellow-400 to-orange-500' },
+  { id: 'top_student', name: 'Top Student', description: 'Completed 3+ courses', emoji: '🏆', color: 'from-amber-400 to-yellow-500' },
+  { id: 'knowledge_seeker', name: 'Knowledge Seeker', description: 'Completed 5+ courses', emoji: '📚', color: 'from-purple-400 to-indigo-600' },
+  { id: 'ai_expert', name: 'AI Expert', description: 'Completed an AI/ML course', emoji: '🤖', color: 'from-teal-400 to-cyan-600' },
+  { id: 'certified_pro', name: 'Certified Pro', description: 'Earned 3+ certificates', emoji: '🎓', color: 'from-green-400 to-emerald-600' },
 ];
 
-// Determine which badges a student has earned based on their certificates
 export function getEarnedBadges(certificates = []) {
   const earned = [];
   const count = certificates.length;
   const titles = certificates.map(c => (c.course?.title || '').toLowerCase());
-
-  if (count >= 1) earned.push('first_course');
-  if (count >= 3) earned.push('top_student');
+  if (count >= 1) { earned.push('first_course'); earned.push('fast_learner'); }
+  if (count >= 3) { earned.push('top_student'); earned.push('certified_pro'); }
   if (count >= 5) earned.push('knowledge_seeker');
-  if (count >= 3) earned.push('certified_pro');
   if (titles.some(t => t.includes('ai') || t.includes('machine') || t.includes('deep learning') || t.includes('neural')))
     earned.push('ai_expert');
-  // fast_learner — always give after 1st cert for demo
-  if (count >= 1) earned.push('fast_learner');
-
   return BADGES.filter(b => earned.includes(b.id));
 }
 
-// ─── Badge Component ──────────────────────────────────────────────────────────
 export function BadgeItem({ badge, size = 'md' }) {
-  const sizes = {
-    sm: 'w-14 h-14 text-2xl',
-    md: 'w-20 h-20 text-3xl',
-    lg: 'w-24 h-24 text-4xl',
-  };
+  const sizes = { sm: 'w-14 h-14 text-2xl', md: 'w-20 h-20 text-3xl', lg: 'w-24 h-24 text-4xl' };
   return (
     <div className="flex flex-col items-center gap-2 group">
-      <div
-        className={`${sizes[size]} rounded-2xl bg-gradient-to-br ${badge.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300 border-2 border-white/30`}
-        title={badge.description}
-      >
+      <div className={`${sizes[size]} rounded-2xl bg-gradient-to-br ${badge.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300 border-2 border-white/30`} title={badge.description}>
         <span>{badge.emoji}</span>
       </div>
       <div className="text-center">
@@ -110,171 +41,367 @@ export function BadgeItem({ badge, size = 'md' }) {
   );
 }
 
+// ─── Helper: load an image and return HTMLImageElement ────────────────────────
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+// ─── Helper: wrap text on canvas ─────────────────────────────────────────────
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let lines = [];
+  for (const word of words) {
+    const test = line ? `${line} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  const totalH = lines.length * lineHeight;
+  const startY = y - totalH / 2 + lineHeight / 2;
+  lines.forEach((l, i) => {
+    ctx.fillText(l, x, startY + i * lineHeight);
+  });
+  return lines.length * lineHeight;
+}
+
+// ─── Main draw function ───────────────────────────────────────────────────────
+async function drawCertificate(canvas, studentName, courseTitle, issuedDate, certId) {
+  const W = canvas.width;
+  const H = canvas.height;
+  const ctx = canvas.getContext('2d');
+
+  // ── Background gradient ──
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0f172a');
+  bg.addColorStop(0.5, '#1e1b4b');
+  bg.addColorStop(1, '#312e81');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Glow overlay ──
+  const g1 = ctx.createRadialGradient(W / 2, 0, 0, W / 2, 0, H * 0.6);
+  g1.addColorStop(0, 'rgba(139,92,246,0.18)');
+  g1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Logo (top-left) ──
+  try {
+    const logo = await loadImage(logoSrc);
+    const lH = 70;
+    const lW = (logo.width / logo.height) * lH;
+    // Draw white version via composite
+    const tmpC = document.createElement('canvas');
+    tmpC.width = lW * 2; tmpC.height = lH * 2;
+    const tCtx = tmpC.getContext('2d');
+    tCtx.drawImage(logo, 0, 0, lW * 2, lH * 2);
+    tCtx.globalCompositeOperation = 'source-in';
+    tCtx.fillStyle = '#ffffff';
+    tCtx.fillRect(0, 0, lW * 2, lH * 2);
+    ctx.drawImage(tmpC, 50, 36, lW, lH);
+  } catch (_) { /* logo failed silently */ }
+
+  // ── Cert ID (top-right) ──
+  ctx.fillStyle = 'rgba(199,210,254,0.55)';
+  ctx.font = '11px monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText('CERTIFICATE ID', W - 50, 52);
+  ctx.fillStyle = 'rgba(199,210,254,0.85)';
+  ctx.font = '12px monospace';
+  ctx.fillText(certId, W - 50, 70);
+
+  // ── "Certificate of Completion" label ──
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#a5b4fc';
+  ctx.font = '13px Arial';
+  ctx.letterSpacing = '0px';
+  ctx.fillText('✦   CERTIFICATE OF COMPLETION   ✦', W / 2, 140);
+
+  ctx.fillStyle = 'rgba(199,210,254,0.6)';
+  ctx.font = '13px Arial';
+  ctx.fillText('THIS CERTIFIES THAT', W / 2, 166);
+
+  // ── Student Name (gold italic) ──
+  ctx.fillStyle = '#fde68a';
+  ctx.font = 'italic bold 52px Georgia, serif';
+  ctx.shadowColor = 'rgba(251,191,36,0.4)';
+  ctx.shadowBlur = 18;
+  ctx.fillText(studentName, W / 2, 226);
+  ctx.shadowBlur = 0;
+
+  // ── Gold divider ──
+  const div = ctx.createLinearGradient(W / 2 - 200, 0, W / 2 + 200, 0);
+  div.addColorStop(0, 'rgba(251,191,36,0)');
+  div.addColorStop(0.3, '#fbbf24');
+  div.addColorStop(0.7, '#fde68a');
+  div.addColorStop(1, 'rgba(251,191,36,0)');
+  ctx.strokeStyle = div;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - 200, 248);
+  ctx.lineTo(W / 2 + 200, 248);
+  ctx.stroke();
+
+  // ── "has successfully completed…" ──
+  ctx.fillStyle = 'rgba(199,210,254,0.72)';
+  ctx.font = '14px Arial';
+  ctx.fillText('has successfully completed the course', W / 2, 278);
+
+  // ── Course title (white, wrapped) ──
+  ctx.fillStyle = '#e0e7ff';
+  ctx.font = 'bold 22px Georgia, serif';
+  wrapText(ctx, courseTitle, W / 2, 320, W - 160, 32);
+
+  // ── Footer dividers ──
+  const footerY = H - 100;
+  ctx.strokeStyle = 'rgba(167,139,250,0.42)';
+  ctx.lineWidth = 1;
+  // Left line
+  ctx.beginPath(); ctx.moveTo(50, footerY); ctx.lineTo(220, footerY); ctx.stroke();
+  // Right line
+  ctx.beginPath(); ctx.moveTo(W - 220, footerY); ctx.lineTo(W - 50, footerY); ctx.stroke();
+
+  // ── Date (bottom-left) ──
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#c7d2fe';
+  ctx.font = 'bold 15px Arial';
+  ctx.fillText(issuedDate, 135, footerY + 22);
+  ctx.fillStyle = 'rgba(199,210,254,0.45)';
+  ctx.font = '10px Arial';
+  ctx.fillText('DATE ISSUED', 135, footerY + 38);
+
+  // ── Seal (center) ──
+  const sealX = W / 2;
+  const sealY = footerY + 16;
+  const sealR = 38;
+  const sealGrad = ctx.createRadialGradient(sealX - 10, sealY - 10, 4, sealX, sealY, sealR);
+  sealGrad.addColorStop(0, '#7c3aed');
+  sealGrad.addColorStop(1, '#4f46e5');
+  ctx.beginPath(); ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
+  ctx.fillStyle = sealGrad;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(251,191,36,0.55)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+  ctx.font = '34px serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.fillText('🎓', sealX, sealY + 12);
+  ctx.fillStyle = 'rgba(199,210,254,0.4)';
+  ctx.font = '9px Arial';
+  ctx.fillText('OFFICIAL SEAL', sealX, footerY + 60);
+
+  // ── Signature (bottom-right) ──
+  try {
+    const sig = await loadImage(signatureSrc);
+    const sH = 68;
+    const sW = (sig.width / sig.height) * sH;
+    const sigX = W - 170 - sW / 2;
+    const sigY = footerY - sH - 4;
+    // White tint
+    const tmpC = document.createElement('canvas');
+    tmpC.width = sW * 2; tmpC.height = sH * 2;
+    const tCtx = tmpC.getContext('2d');
+    tCtx.drawImage(sig, 0, 0, sW * 2, sH * 2);
+    tCtx.globalCompositeOperation = 'source-in';
+    tCtx.fillStyle = '#fff';
+    tCtx.fillRect(0, 0, sW * 2, sH * 2);
+    ctx.drawImage(tmpC, sigX, sigY, sW, sH);
+  } catch (_) { /* sig failed silently */ }
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#c7d2fe';
+  ctx.font = 'bold 15px Arial';
+  ctx.fillText('AI LearnHub', W - 135, footerY + 22);
+  ctx.fillStyle = 'rgba(199,210,254,0.45)';
+  ctx.font = '10px Arial';
+  ctx.fillText('DIRECTOR OF EDUCATION', W - 135, footerY + 38);
+}
+
 // ─── Certificate Card ─────────────────────────────────────────────────────────
 export default function CertificateCard({ certificate }) {
-  const certRef = useRef(null);
+  const previewRef = useRef(null);
+  const [downloading, setDownloading] = useState(false);
+
+  // Defensive check for certificate object
+  if (!certificate) {
+    return (
+      <div className="p-10 text-center bg-slate-50 rounded-3xl border border-dashed border-slate-300">
+        <p className="text-slate-500">Certificate data not available.</p>
+      </div>
+    );
+  }
 
   const studentName = certificate.user_name || certificate.student_name || 'Student';
   const courseTitle = certificate.course?.title || certificate.course_title || 'Course';
-  const issuedDate = new Date(certificate.issued_date).toLocaleDateString('en-GB', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  });
-  const certId = certificate.id || '';
 
-  const handlePrint = () => {
-    const printContent = document.getElementById(`cert-print-${certId}`);
-    if (!printContent) return;
-    const win = window.open('', '_blank');
-    win.document.write(`
-      <html>
-        <head>
-          <title>Certificate - ${courseTitle}</title>
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: 'Georgia', serif; background: white; }
-            .cert-page { width: 1120px; height: 790px; }
-          </style>
-        </head>
-        <body>
-          <div class="cert-page">${printContent.innerHTML}</div>
-          <script>window.onload = () => { window.print(); window.close(); }<\/script>
-        </body>
-      </html>
-    `);
-    win.document.close();
-    toast.success('Certificate print dialog opened!');
+  let issuedDate = 'Date Pending';
+  try {
+    if (certificate.issued_date) {
+      issuedDate = new Date(certificate.issued_date).toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'long', year: 'numeric',
+      });
+    }
+  } catch (e) {
+    console.error("Invalid date:", certificate.issued_date);
+  }
+
+  const certId = (certificate.id || certificate._id || '').toString().slice(0, 16).toUpperCase();
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1120;
+      canvas.height = 790;
+      await drawCertificate(canvas, studentName, courseTitle, issuedDate, certId);
+
+      // Download as PNG
+      canvas.toBlob(blob => {
+        if (!blob) {
+          toast.error('Failed to generate image blob');
+          return;
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Certificate_${courseTitle.replace(/\s+/g, '_')}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast.success('Certificate downloaded!');
+      }, 'image/png');
+    } catch (e) {
+      console.error("Download error:", e);
+      toast.error('Download failed, please try again');
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
-      {/* ── Certificate Preview ── */}
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden max-w-4xl mx-auto">
+
+      {/* ── Certificate Preview (HTML render — just for display) ── */}
       <div
-        id={`cert-print-${certId}`}
-        ref={certRef}
+        ref={previewRef}
         style={{
-          background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 100%)',
+          background: 'linear-gradient(160deg, #0f172a 0%, #1e1b4b 55%, #312e81 100%)',
+          padding: '36px 44px 32px',
           position: 'relative',
-          padding: '48px 56px',
-          minHeight: '420px',
           overflow: 'hidden',
+          minHeight: 370,
         }}
       >
-        {/* Background decorations */}
+        {/* Glow */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(139,92,246,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(99,102,241,0.2) 0%, transparent 40%)',
-          pointerEvents: 'none',
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.2) 0%, transparent 60%)',
         }} />
-        {/* Corner ornaments */}
-        <div style={{ position: 'absolute', top: 18, left: 18, width: 48, height: 48, border: '2px solid rgba(167,139,250,0.5)', borderRadius: 6 }} />
-        <div style={{ position: 'absolute', top: 22, left: 22, width: 40, height: 40, border: '1px solid rgba(167,139,250,0.3)', borderRadius: 4 }} />
-        <div style={{ position: 'absolute', bottom: 18, right: 18, width: 48, height: 48, border: '2px solid rgba(167,139,250,0.5)', borderRadius: 6 }} />
-        <div style={{ position: 'absolute', bottom: 22, right: 22, width: 40, height: 40, border: '1px solid rgba(167,139,250,0.3)', borderRadius: 4 }} />
 
-        {/* Header row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 }}>
-          <img src={logo} alt="AI LearnHub" style={{ height: 48, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
+        {/* Top row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 22 }}>
+          <img src={logoSrc} alt="AI LearnHub"
+            style={{ height: 60, objectFit: 'contain', filter: 'brightness(0) invert(1)' }} />
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 10, color: 'rgba(199,210,254,0.7)', letterSpacing: 3, textTransform: 'uppercase' }}>Certificate ID</div>
-            <div style={{ fontSize: 10, color: 'rgba(199,210,254,0.9)', fontFamily: 'monospace', marginTop: 2 }}>{certId.slice(0, 16).toUpperCase()}</div>
+            <div style={{ fontSize: 9, color: 'rgba(199,210,254,0.55)', letterSpacing: 3, textTransform: 'uppercase' }}>Certificate ID</div>
+            <div style={{ fontSize: 10, color: 'rgba(199,210,254,0.85)', fontFamily: 'monospace', marginTop: 2 }}>{certId}</div>
           </div>
         </div>
 
-        {/* Title */}
+        {/* Center body */}
         <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 11, color: '#c7d2fe', letterSpacing: 6, textTransform: 'uppercase', marginBottom: 10 }}>
-            ✦ Certificate of Completion ✦
+          <div style={{ fontSize: 10, color: '#a5b4fc', letterSpacing: 5, textTransform: 'uppercase', marginBottom: 8 }}>
+            ✦ &nbsp;Certificate of Completion&nbsp; ✦
           </div>
-          <div style={{ fontSize: 13, color: 'rgba(199,210,254,0.7)', letterSpacing: 2, marginBottom: 16, textTransform: 'uppercase' }}>
+          <div style={{ fontSize: 11, color: 'rgba(199,210,254,0.62)', letterSpacing: 3, textTransform: 'uppercase', marginBottom: 12 }}>
             This certifies that
           </div>
+          {/* Gold student name */}
           <div style={{
-            fontSize: 40, fontFamily: 'Georgia, serif', color: '#ffffff',
-            fontStyle: 'italic', fontWeight: 700, letterSpacing: 1,
-            textShadow: '0 2px 20px rgba(139,92,246,0.5)',
-            marginBottom: 12,
+            fontFamily: 'Georgia,"Times New Roman",serif', fontStyle: 'italic', fontWeight: 700,
+            fontSize: 42, color: '#fde68a',
+            textShadow: '0 2px 18px rgba(251,191,36,0.4)',
+            marginBottom: 12, lineHeight: 1.15,
           }}>
             {studentName}
           </div>
-          <div style={{ height: 2, background: 'linear-gradient(90deg, transparent, #818cf8, #a78bfa, #818cf8, transparent)', maxWidth: 320, margin: '0 auto 16px' }} />
-          <div style={{ fontSize: 13, color: 'rgba(199,210,254,0.8)', letterSpacing: 1, marginBottom: 8 }}>
+          {/* Gold divider */}
+          <div style={{
+            height: 2, maxWidth: 340, margin: '0 auto 12px',
+            background: 'linear-gradient(90deg, transparent, #fbbf24, #fde68a, #fbbf24, transparent)',
+          }} />
+          <div style={{ fontSize: 12, color: 'rgba(199,210,254,0.72)', letterSpacing: 1, marginBottom: 8 }}>
             has successfully completed the course
           </div>
           <div style={{
-            fontSize: 22, color: '#e0e7ff', fontWeight: 700,
-            fontFamily: 'Georgia, serif', maxWidth: 600, margin: '0 auto',
-            lineHeight: 1.3,
+            fontFamily: 'Georgia,serif', fontWeight: 700, fontSize: 20, color: '#e0e7ff',
+            maxWidth: 540, margin: '0 auto', lineHeight: 1.35,
           }}>
             {courseTitle}
           </div>
         </div>
 
-        {/* Badges row */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginBottom: 24 }}>
-          {['🏆', '⭐', '🎓'].map((emoji, i) => (
-            <div key={i} style={{
-              width: 36, height: 36, borderRadius: 8,
-              background: 'rgba(99,102,241,0.3)',
-              border: '1px solid rgba(139,92,246,0.5)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 16,
-            }}>{emoji}</div>
-          ))}
-        </div>
-
-        {/* Footer row */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 8 }}>
-          {/* Left: Date */}
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ height: 1, background: 'rgba(167,139,250,0.5)', width: 160, marginBottom: 6 }} />
-            <div style={{ fontSize: 13, color: '#c7d2fe', fontWeight: 600 }}>{issuedDate}</div>
-            <div style={{ fontSize: 10, color: 'rgba(199,210,254,0.5)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 2 }}>Date Issued</div>
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 20 }}>
+          {/* Date */}
+          <div style={{ textAlign: 'center', minWidth: 130 }}>
+            <div style={{ height: 1, background: 'rgba(167,139,250,0.42)', width: 130, marginBottom: 6 }} />
+            <div style={{ fontSize: 14, color: '#c7d2fe', fontWeight: 700 }}>{issuedDate}</div>
+            <div style={{ fontSize: 9, color: 'rgba(199,210,254,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 3 }}>Date Issued</div>
           </div>
-
-          {/* Center: Seal */}
+          {/* Seal */}
           <div style={{ textAlign: 'center' }}>
             <div style={{
-              width: 72, height: 72, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
-              border: '3px solid rgba(167,139,250,0.6)',
+              width: 64, height: 64, borderRadius: '50%',
+              background: 'linear-gradient(135deg,#7c3aed,#4f46e5)',
+              border: '3px solid rgba(251,191,36,0.5)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              margin: '0 auto',
-              boxShadow: '0 0 20px rgba(139,92,246,0.4)',
+              margin: '0 auto', boxShadow: '0 0 18px rgba(139,92,246,0.45)',
             }}>
-              <div style={{ fontSize: 28 }}>🎓</div>
+              <span style={{ fontSize: 28 }}>🎓</span>
             </div>
-            <div style={{ fontSize: 9, color: 'rgba(199,210,254,0.5)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>Official Seal</div>
+            <div style={{ fontSize: 8, color: 'rgba(199,210,254,0.42)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>Official Seal</div>
           </div>
-
-          {/* Right: Signature */}
-          <div style={{ textAlign: 'center' }}>
-            <img
-              src={signature}
-              alt="Signature"
-              style={{ height: 44, objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9, marginBottom: 6 }}
-            />
-            <div style={{ height: 1, background: 'rgba(167,139,250,0.5)', width: 160, marginBottom: 6 }} />
-            <div style={{ fontSize: 13, color: '#c7d2fe', fontWeight: 600 }}>AI LearnHub</div>
-            <div style={{ fontSize: 10, color: 'rgba(199,210,254,0.5)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 2 }}>Director of Education</div>
+          {/* Signature */}
+          <div style={{ textAlign: 'center', minWidth: 130 }}>
+            <img src={signatureSrc} alt="Signature"
+              style={{ height: 58, objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.9, display: 'block', margin: '0 auto 6px' }} />
+            <div style={{ height: 1, background: 'rgba(167,139,250,0.42)', width: 130, marginBottom: 6 }} />
+            <div style={{ fontSize: 14, color: '#c7d2fe', fontWeight: 700 }}>AI LearnHub</div>
+            <div style={{ fontSize: 9, color: 'rgba(199,210,254,0.45)', letterSpacing: 2, textTransform: 'uppercase', marginTop: 3 }}>Director of Education</div>
           </div>
         </div>
       </div>
 
-      {/* ── Card Footer ── */}
+      {/* ── Card footer ── */}
       <div className="p-5 flex items-center justify-between bg-slate-50">
         <div>
           <h3 className="font-bold text-slate-900 text-base leading-tight">{courseTitle}</h3>
           <p className="text-slate-500 text-sm mt-0.5">Issued {issuedDate}</p>
-          <p className="text-slate-400 text-xs mt-0.5 font-mono">ID: {certId.slice(0, 16).toUpperCase()}</p>
+          <p className="text-slate-400 text-xs mt-0.5 font-mono">ID: {certId}</p>
         </div>
-        <Button
-          onClick={handlePrint}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white shrink-0"
+        <button
+          onClick={handleDownload}
+          disabled={downloading}
           data-testid="download-certificate-btn"
+          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-bold rounded-xl transition-all text-sm"
         >
-          <Download size={16} className="mr-2" />
-          Download
-        </Button>
+          <Download size={16} />
+          {downloading ? 'Generating…' : 'Download PNG'}
+        </button>
       </div>
     </div>
   );
