@@ -6,7 +6,7 @@ import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import BlogSection from '@/components/BlogSection';
 import NewsletterSignup from '@/components/NewsletterSignup';
 import '@/components/Newsletter.css';
-import logo from '../Logo/logo.png';
+import logo from '../Logo/logo-main.png';
 import {
   BookOpen, Users, Award, TrendingUp, ArrowRight, Star, Play, ChevronRight,
   Zap, Shield, Globe
@@ -217,7 +217,7 @@ export default function LandingPage({ user, logout }) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-4">
-              <span className="text-indigo-700 text-sm font-semibold">Why BritSyncAI Academy?</span>
+              <span className="text-indigo-700 text-sm font-semibold">Why AI LearnHub?</span>
             </div>
             <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Built for real results</h2>
             <p className="text-slate-500 text-lg max-w-xl mx-auto">Everything you need to go from beginner to expert, in one platform.</p>

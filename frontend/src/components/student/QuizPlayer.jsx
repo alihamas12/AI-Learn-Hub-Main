@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Award } from 'lucide-react';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -14,6 +15,7 @@ export default function QuizPlayer({ quiz, onComplete }) {
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelectAnswer = (questionIndex, answerIndex) => {
     if (submitted) return;
@@ -36,7 +38,6 @@ export default function QuizPlayer({ quiz, onComplete }) {
   };
 
   const handleSubmit = async () => {
-    // Check all questions are answered
     const unanswered = quiz.questions.findIndex((_, i) => selectedAnswers[i] === undefined);
     if (unanswered !== -1) {
       toast.error(`Please answer all questions (Question ${unanswered + 1} is unanswered)`);
@@ -55,7 +56,11 @@ export default function QuizPlayer({ quiz, onComplete }) {
       setSubmitted(true);
 
       if (response.data.score >= 70) {
-        toast.success(`Great job! You scored ${response.data.score}%`);
+        if (response.data.certificate_earned) {
+          toast.success('🎓 Certificate earned! Check your Dashboard!', { duration: 6000 });
+        } else {
+          toast.success(`Great job! You scored ${response.data.score}%`);
+        }
       } else {
         toast.info(`You scored ${response.data.score}%. Keep practicing!`);
       }
@@ -87,6 +92,41 @@ export default function QuizPlayer({ quiz, onComplete }) {
             <p>You got {result.correct} out of {result.total} questions correct</p>
           </div>
         </div>
+
+        {/* Certificate Banner */}
+        {result.certificate_earned && (
+          <div style={{
+            margin: '20px 0',
+            padding: '20px 24px',
+            background: 'linear-gradient(135deg, #fef3c7, #fde68a)',
+            border: '2px solid #f59e0b',
+            borderRadius: '16px',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 36, marginBottom: 8 }}>🎓</div>
+            <div style={{ fontWeight: 800, fontSize: 18, color: '#92400e', marginBottom: 4 }}>
+              Certificate Earned!
+            </div>
+            <div style={{ color: '#78350f', fontSize: 14, marginBottom: 16 }}>
+              Congratulations! Your certificate is ready in your dashboard.
+            </div>
+            <button
+              onClick={() => navigate('/dashboard')}
+              style={{
+                background: '#d97706',
+                color: 'white',
+                border: 'none',
+                borderRadius: 10,
+                padding: '10px 24px',
+                fontWeight: 700,
+                fontSize: 14,
+                cursor: 'pointer',
+              }}
+            >
+              🏅 View My Certificate
+            </button>
+          </div>
+        )}
 
         {result.score < 70 && (
           <p className="retry-message">Keep learning and try again to improve your score!</p>

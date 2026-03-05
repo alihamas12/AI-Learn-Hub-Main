@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Mail, ArrowLeft, CheckCircle, GraduationCap, ArrowRight } from 'lucide-react';
-import logo from '../Logo/logo.png';
+import logo from '../Logo/logo-main.png';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
                 <div className="relative z-10 flex flex-col justify-between p-12 w-full text-white">
                     <Link to="/" className="flex items-center gap-3">
                         <img src={logo} alt="Logo" className="w-10 h-10 object-contain rounded-xl shadow-lg shadow-white/10" />
-                        <span className="text-2xl font-extrabold tracking-tight">BritSyncAI Academy</span>
+                        <span className="text-2xl font-extrabold tracking-tight">AI LearnHub</span>
                     </Link>
 
                     <div className="flex flex-col gap-6">
@@ -75,7 +75,7 @@ export default function ForgotPasswordPage() {
                     {/* Mobile Logo */}
                     <Link to="/" className="flex lg:hidden items-center gap-2 mb-8 justify-center">
                         <img src={logo} alt="Logo" className="w-9 h-9 object-contain" />
-                        <span className="font-extrabold text-xl text-slate-800">BritSyncAI Academy</span>
+                        <span className="font-extrabold text-xl text-slate-800">AI LearnHub</span>
                     </Link>
 
                     {submitted ? (

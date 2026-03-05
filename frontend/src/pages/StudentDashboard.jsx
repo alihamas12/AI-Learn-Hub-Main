@@ -5,7 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Navbar from '@/components/Navbar';
 import { getThumbnailUrl } from '@/utils/thumbnailUrl';
-import CertificateCard from '@/components/student/CertificateCard';
+import CertificateCard, { BadgeItem, getEarnedBadges } from '@/components/student/CertificateCard';
 import {
   BookOpen, Award, TrendingUp, AlertCircle, Clock, ArrowRight, Play,
   ChevronRight, BarChart2, Star
@@ -124,6 +124,9 @@ export default function StudentDashboard({ user, logout }) {
             </TabsTrigger>
             <TabsTrigger value="certificates" data-testid="certificates-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
               Certificates
+            </TabsTrigger>
+            <TabsTrigger value="badges" data-testid="badges-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
+              🏆 Badges
             </TabsTrigger>
           </TabsList>
 
@@ -247,13 +250,36 @@ export default function StudentDashboard({ user, logout }) {
                 <p className="text-slate-500">Complete courses and pass all quizzes to earn certificates!</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {certificates.map((cert) => <CertificateCard key={cert.id} certificate={cert} />)}
               </div>
             )}
           </TabsContent>
+
+          {/* Badges */}
+          <TabsContent value="badges" data-testid="badges-list">
+            <div className="bg-white rounded-3xl border border-slate-100 p-8">
+              <div className="mb-6">
+                <h2 className="text-xl font-extrabold text-slate-900">Your Achievements</h2>
+                <p className="text-slate-500 text-sm mt-1">Badges you've earned through your learning journey</p>
+              </div>
+              {certificates.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-5xl mb-4">🏅</div>
+                  <h3 className="text-lg font-bold text-slate-800 mb-2">No badges yet</h3>
+                  <p className="text-slate-500">Complete courses to earn badges!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                  {getEarnedBadges(certificates).map(badge => (
+                    <BadgeItem key={badge.id} badge={badge} size="lg" />
+                  ))}
+                </div>
+              )}
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </div >
   );
 }
