@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masterpiece Course Certificate</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,600;6..96,700;6..96,800&family=Great+Vibes&family=Playfair+Display:wght@400;500;600&family=Alex+Brush&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .certificate {
+            width: 1050px;
+            height: 750px;
+            background-color: #ffffff;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            overflow: hidden;
+        }
+
+        /* -------------------------------------
+           BORDER DESIGN (EXACT MATCH)
+           -------------------------------------        /* -------------------------------------
+           LUXURY BORDER DESIGN (REFERENCE MATCH)
+           ------------------------------------- */
+        .outer-border {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+            border: 3px solid transparent;
+            border-image: linear-gradient(135deg, #e4c272, #fceeb5, #8a6b2c) 1;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            pointer-events: none;
+        }
+
+        .inner-border {
+            position: absolute;
+            top: 38px;
+            left: 38px;
+            right: 38px;
+            bottom: 38px;
+            border: 1px solid transparent;
+            border-image: linear-gradient(135deg, #fceeb5, #8a6b2c, #e4c272) 1;
+            box-shadow: inset 0 0 3px rgba(228, 194, 114, 0.3);
+            pointer-events: none;
+        }
+
+        /* SVGs and Ornaments */
+        .corner-streak {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 5;
+        }
+
+        .corner-tl {
+            top: 38px;
+            left: 38px;
+            transform: rotate(0deg);
+        }
+
+        .corner-tr {
+            top: 38px;
+            right: 38px;
+            transform: scaleX(-1);
+        }
+
+        .corner-bl {
+            bottom: 38px;
+            left: 38px;
+            transform: scaleY(-1);
+        }
+
+        .corner-br {
+            bottom: 38px;
+            right: 38px;
+            transform: scale(-1, -1);
+        }
+
+        .diamond {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #fceeb5, #d4af37, #997a00);
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            z-index: 10;
+        }
+
+        .diamond-top {
+            top: 34px;
+        }
+
+        .diamond-bottom {
+            bottom: 34px;
+        }
+
+        .side-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #fceeb5, #d4af37, #997a00);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .dot-left {
+            left: 19px;
+        }
+
+        .dot-right {
+            right: 19px;
+        }
+
+
+        /* -------------------------------------
+           CROWN ORNAMENT & RIBBON
+           ------------------------------------- */
+
+        .content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .top-group {
+            position: relative;
+            margin-top: 5px;
+            width: 500px;
+            /* Slightly wider to accommodate picture */
+            height: 180px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .top-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* -------------------------------------
+           TYPOGRAPHY (TITLE & TEXT)
+           ------------------------------------- */
+
+        .main-title {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 38px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 5px 0 0 0;
+            color: #1a1a1a;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .presented-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 15.5px;
+            font-weight: 500;
+            color: #333;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .recipient-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 55px;
+            font-weight: 400;
+            color: #111;
+            margin: 0 0 15px 0;
+            text-align: center;
+            line-height: 1.1;
+            margin-top: 12px;
+        }
+
+        .description-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+            text-align: center;
+            max-width: 580px;
+        }
+
+        /* -------------------------------------
+           FOOTER (COURSE DETAILS + MEDAL + SIGNATURE)
+           ------------------------------------- */
+
+        .footer-area {
+            position: absolute;
+            bottom: 30px;
+            width: 85%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-block {
+            width: 220px;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 90px;
+        }
+
+        /* Course Info Styles (Left Side) */
+        .course-info {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .course-info-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .info-label {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        /* Signature Graphic */
+        .signature-graphic-left {
+            position: absolute;
+            bottom: 35px;
+            width: 100%;
+            text-align: center;
+            left: 0;
+            transform: rotate(-3deg);
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .footer-line {
+            border-top: 1px solid #111;
+            width: 80%;
+            margin-bottom: 8px;
+            margin-top: 8px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-name {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 2px;
+        }
+
+        .footer-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 11px;
+            color: #555;
+            letter-spacing: 0.5px;
+        }
+
+        /* Signature Graphic (Right Side) */
+        .signature-graphic {
+            position: absolute;
+            bottom: 35px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-5deg);
+            font-family: 'Alex Brush', cursive;
+            font-size: 42px;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        /* -------------------------------------
+           BOTTOM GOLD SEAL MEDAL
+           ------------------------------------- */
+
+        .seal-group {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            /* Alignment with side blocks */
+            z-index: 10;
+        }
+
+        .seal-ribbon-tails {
+            position: absolute;
+            bottom: -22px;
+            width: 70px;
+            height: 50px;
+            z-index: 1;
+        }
+
+        .seal-medal {
+            width: 88px;
+            height: 88px;
+            background: radial-gradient(circle at 30% 30%, #fceeb5, #d4af37, #997a00);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .seal-medal-inner {
+            width: 76px;
+            height: 76px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="certificate">
+        <!-- Exact Luxury Borders -->
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
+
+        <!-- Corner Gold Gradient Streaks (SVG) -->
+        <svg class="corner-streak corner-tl" viewBox="0 0 50 50">
+            <defs>
+                <linearGradient id="cgrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#b68d40" />
+                    <stop offset="50%" stop-color="#fceeb5" />
+                    <stop offset="100%" stop-color="#997a00" />
+                </linearGradient>
+                <linearGradient id="cgrad-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8a6b2c" />
+                    <stop offset="50%" stop-color="#c1a141" />
+                    <stop offset="100%" stop-color="#735c00" />
+                </linearGradient>
+            </defs>
+            <path d="M 0 20 L 20 0 L 32 0 L 0 32 Z" fill="url(#cgrad)"
+                filter="drop-shadow(1px 1px 1px rgba(0,0,0,0.1))" />
+            <path d="M 0 42 L 42 0 L 45 0 L 0 45 Z" fill="none" stroke="url(#cgrad-dark)" stroke-width="2" />
+            <polygon points="0,0 12,0 0,12" fill="url(#cgrad-dark)" />
+        </svg>
+        <svg class="corner-streak corner-tr" viewBox="0 0 50 50">
+            <path d="M 0 20 L 20 0 L 32 0 L 0 32 Z" fill="url(#cgrad)"
+                filter="drop-shadow(1px 1px 1px rgba(0,0,0,0.1))" />
+            <path d="M 0 42 L 42 0 L 45 0 L 0 45 Z" fill="none" stroke="url(#cgrad-dark)" stroke-width="2" />
+            <polygon points="0,0 12,0 0,12" fill="url(#cgrad-dark)" />
+        </svg>
+        <svg class="corner-streak corner-bl" viewBox="0 0 50 50">
+            <path d="M 0 20 L 20 0 L 32 0 L 0 32 Z" fill="url(#cgrad)"
+                filter="drop-shadow(1px 1px 1px rgba(0,0,0,0.1))" />
+            <path d="M 0 42 L 42 0 L 45 0 L 0 45 Z" fill="none" stroke="url(#cgrad-dark)" stroke-width="2" />
+            <polygon points="0,0 12,0 0,12" fill="url(#cgrad-dark)" />
+        </svg>
+        <svg class="corner-streak corner-br" viewBox="0 0 50 50">
+            <path d="M 0 20 L 20 0 L 32 0 L 0 32 Z" fill="url(#cgrad)"
+                filter="drop-shadow(1px 1px 1px rgba(0,0,0,0.1))" />
+            <path d="M 0 42 L 42 0 L 45 0 L 0 45 Z" fill="none" stroke="url(#cgrad-dark)" stroke-width="2" />
+            <polygon points="0,0 12,0 0,12" fill="url(#cgrad-dark)" />
+        </svg>
+
+        <!-- Ornaments -->
+        <div class="diamond diamond-top"></div>
+        <div class="diamond diamond-bottom"></div>
+        <div class="side-dot dot-left"></div>
+        <div class="side-dot dot-right"></div>
+
+        <div class="content">
+
+            <div class="top-group">
+                <!-- Using the exact image provided by the user for the crest and ribbon -->
+                <img src="image.png" alt="Certificate Header" class="top-image">
+            </div>
+
+            <h1 class="main-title">COURSE NAME</h1>
+
+            <p
+                style="font-family: 'Bodoni Moda', serif; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; color: #a68a3d; margin-top: -5px; margin-bottom: 25px; text-align: center;">
+                Professional Certification Program</p>
+
+            <p class="presented-text">This is to certify that</p>
+
+            <p class="recipient-name">Helene Paquet</p>
+
+            <p class="description-text">
+                has successfully completed all required modules and comprehensive assessments.<br>
+                This certification recognizes the dedication, acquired expertise, and outstanding<br>
+                proficiency demonstrated throughout the rigorous academic training program.
+            </p>
+
+            <p
+                style="font-family: 'Playfair Display', serif; font-size: 13px; color: #666; margin-top: 15px; letter-spacing: 1px; text-align: center;">
+                Certificate ID: CERT-2026-904X &nbsp; | &nbsp; Awarded with Distinction
+            </p>
+
+            <!-- Bottom Elements (Course Replace on Left, Medal Center, Signature Right) -->
+            <div class="footer-area">
+
+                <!-- Left Block: High-End Course Requirements Insert -->
+                <div class="footer-block" style="align-items: flex-start; text-align: left; padding: 10px 15px;">
+                    <p style="font-family: 'Playfair Display', serif; font-size: 15px; color: #444; margin: 4px 0;">
+                        <strong>Date Issued:</strong> 05 / 26
+                    </p>
+                    <p style="font-family: 'Playfair Display', serif; font-size: 15px; color: #444; margin: 4px 0;">
+                        <strong>Hours:</strong> 40 Hrs
+                    </p>
+                </div>
+
+                <!-- Center Logo -->
+                <div style="width: 120px; height: 120px; display: flex; justify-content: center; align-items: center;">
+                    <img src="logo.png" alt="Company Logo"
+                        style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+
+                <!-- Right Block: CEO Signature Image -->
+                <div class="footer-block" style="align-items: center;">
+                    <img src="Signature.png" alt="CEO Signature"
+                        style="position: absolute; bottom: 35px; width: 140px; height: auto; object-fit: contain;">
+                    <div class="footer-line" style="margin-top: 50px;"></div>
+                    <p class="footer-name">Syed Islam</p>
+                    <p class="footer-title">CEO</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

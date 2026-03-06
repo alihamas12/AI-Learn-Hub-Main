@@ -986,6 +986,19 @@ async def update_course(course_id: str, updates: dict, current_user: User = Depe
     updates.pop('id', None)
     updates.pop('instructor_id', None)
     
+    # Thumbnail persistence guardrail: 
+    # Don't overwrite an existing thumbnail with an empty string unless explicitly requested via a flag
+    if 'thumbnail' in updates and not updates['thumbnail']:
+        if course.get('thumbnail'):
+            # If the current record has a thumbnail, and the update is an empty string,
+            # only proceed if an explicit removal flag is present or if we allow resetting.
+            # For now, we protect the existing thumbnail to prevent accidental wipes from UI state sync issues.
+            logging.info(f"Course {course_id}: Preserving existing thumbnail despite empty update.")
+            updates.pop('thumbnail')
+    
+    if 'thumbnail' in updates:
+        logging.info(f"Course {course_id}: Updating thumbnail to {updates['thumbnail']}")
+
     await db.courses.update_one({"id": course_id}, {"$set": updates})
     return {"message": "Course updated", "status": "published"}
 

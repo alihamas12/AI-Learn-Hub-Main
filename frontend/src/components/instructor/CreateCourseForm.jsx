@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { X, Sparkles, Plus, Trash2, ArrowRight, ArrowLeft, Check, BookOpen, Clock, DollarSign, Image as ImageIcon, Search } from 'lucide-react';
 import { toast } from 'sonner';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -382,7 +383,7 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
                   />
                   {formData.thumbnail && (
                     <div className="thumb-preview">
-                      <img src={formData.thumbnail} alt="Preview" />
+                      <img src={getThumbnailUrl(formData.thumbnail)} alt="Preview" />
                       <button
                         type="button"
                         className="remove-thumb"

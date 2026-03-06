@@ -23,6 +23,7 @@ import BecomeInstructor from "@/pages/BecomeInstructor";
 import PublicProfile from "@/pages/PublicProfile";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
+import CertificatePage from "@/pages/CertificatePage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -148,6 +149,7 @@ function App() {
           />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/certificate/:id" element={<CertificatePage />} />
         </Routes>
       </BrowserRouter>
       <Toaster position="top-right" />

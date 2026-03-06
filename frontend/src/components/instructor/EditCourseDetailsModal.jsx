@@ -66,24 +66,42 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
     });
 
     useEffect(() => {
+        // Only reset entire formData if we don't have a course loaded yet
+        // OR if the course ID changed (switching courses).
+        // Otherwise, we specifically sync critical fields like thumbnail if they change from external uploads
+        // but avoid wiping out user's active edits in other fields.
         if (course) {
-            setFormData({
-                title: course.title || '',
-                description: course.description || '',
-                category: course.category || 'Programming',
-                level: course.level || 'Beginner',
-                language: course.language || 'English',
-                requirements: course.requirements?.length ? course.requirements : [''],
-                outcomes: course.outcomes?.length ? course.outcomes : [''],
-                faqs: course.faqs?.length ? course.faqs : [{ question: '', answer: '' }],
-                price: course.price || 0,
-                discount_price: course.discount_price || null,
-                thumbnail: course.thumbnail || '',
-                video_platform: course.video_platform || 'youtube',
-                preview_video: course.preview_video || '',
-                meta_keywords: course.meta_keywords || '',
-                meta_description: course.meta_description || '',
-                drip_content: course.drip_content || false
+            setFormData(prev => {
+                // If it's a completely different course, reset everything
+                if (!prev.id || prev.id !== course.id) {
+                    return {
+                        id: course.id, // Add ID to tracking
+                        title: course.title || '',
+                        description: course.description || '',
+                        category: course.category || 'Programming',
+                        level: course.level || 'Beginner',
+                        language: course.language || 'English',
+                        requirements: course.requirements?.length ? course.requirements : [''],
+                        outcomes: course.outcomes?.length ? course.outcomes : [''],
+                        faqs: course.faqs?.length ? course.faqs : [{ question: '', answer: '' }],
+                        price: course.price || 0,
+                        discount_price: course.discount_price || null,
+                        thumbnail: course.thumbnail || '',
+                        video_platform: course.video_platform || 'youtube',
+                        preview_video: course.preview_video || '',
+                        meta_keywords: course.meta_keywords || '',
+                        meta_description: course.meta_description || '',
+                        drip_content: course.drip_content || false
+                    };
+                }
+
+                // If it's the same course, only sync the thumbnail if it updated externally
+                // (e.g. from ManageCourse parent component upload)
+                if (course.thumbnail !== prev.thumbnail && course.thumbnail) {
+                    return { ...prev, thumbnail: course.thumbnail };
+                }
+
+                return prev;
             });
         }
     }, [course]);
@@ -188,6 +206,12 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
                 outcomes: formData.outcomes.filter(o => o.trim()),
                 faqs: formData.faqs.filter(f => f.question.trim() && f.answer.trim())
             };
+
+            // Double safety: if thumbnail is an empty string in form but exists in course data, 
+            // don't send it to prevent accidental wipe.
+            if (!payload.thumbnail && course.thumbnail) {
+                delete payload.thumbnail;
+            }
 
             await axios.patch(`${API}/courses/${course.id}`, payload, {
                 headers: { Authorization: `Bearer ${token}` }

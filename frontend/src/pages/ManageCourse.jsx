@@ -15,6 +15,7 @@ import LessonsList from '@/components/instructor/LessonsList';
 import EditCourseDetailsModal from '@/components/instructor/EditCourseDetailsModal';
 import { Plus, ArrowLeft, FolderPlus, Video, HelpCircle, Trash2, Edit, Image as ImageIcon, Upload } from 'lucide-react';
 import { toast } from 'sonner';
+import { getThumbnailUrl } from '@/utils/thumbnailUrl';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -213,12 +214,6 @@ export default function ManageCourse({ user, logout }) {
     }
   };
 
-  // Helper: build full URL for thumbnails stored as relative paths on backend
-  const getThumbnailUrl = (thumbnail) => {
-    if (!thumbnail) return '/placeholder-course.png';
-    if (thumbnail.startsWith('http')) return thumbnail; // already absolute
-    return `${BACKEND_URL}${thumbnail}`; // prefix with Railway backend URL
-  };
 
   if (loading) return <div className="loading">Loading...</div>;
   if (!course) return <div>Course not found</div>;
@@ -616,8 +611,8 @@ export default function ManageCourse({ user, logout }) {
               </div>
             </div>
           </TabsContent>
-        </Tabs>
-      </div>
+        </Tabs >
+      </div >
 
       {
         showAddSection && (
