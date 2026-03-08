@@ -7,6 +7,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import json
 import tempfile
+import shutil
+import traceback
 
 import logging
 from pathlib import Path
@@ -56,40 +58,57 @@ if not hasattr(bcrypt, "__about__"):
 # Set Stripe key
 stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
+# Directory configuration
 ROOT_DIR = Path(__file__).parent
+UPLOAD_DIR = ROOT_DIR / "uploads"
+THUMBNAIL_DIR = UPLOAD_DIR / "thumbnails"
+PDF_DIR = UPLOAD_DIR / "pdfs"
 
-# MongoDB connection
-mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-db_name = os.environ.get('DB_NAME', 'britsyncai')
-client = AsyncIOMotorClient(mongo_url)
-db = client[db_name]
-
-# Security
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-security = HTTPBearer()
-
-# JWT Settings
-JWT_SECRET = os.environ.get('JWT_SECRET')
-JWT_ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
-
-# Commission
-ADMIN_COMMISSION = float(os.environ.get('ADMIN_COMMISSION', 0.15))
+# Create directories
+UPLOAD_DIR.mkdir(exist_ok=True)
+THUMBNAIL_DIR.mkdir(exist_ok=True)
+PDF_DIR.mkdir(exist_ok=True)
 
 # Create the main app
 app = FastAPI(title="BritSyncAI Academy API")
 
+# Define allowed origins (Localhost + Your Domain + Railway)
+origins = [
+    "http://localhost:3000",
+    "https://britsyncaiacademy.online",
+    "http://britsyncaiacademy.online",
+    "https://learnhub-production-3604.up.railway.app",
+    "*"  # Optional: Allows everyone (good for debugging, remove later for security)
+]
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# JWT Configuration
+JWT_SECRET = os.environ.get("JWT_SECRET", "your-secret-key")
+JWT_ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 1 week
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer()
+
+# Database configuration
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+DB_NAME = os.environ.get("DB_NAME", "learnhub")
+client = AsyncIOMotorClient(MONGO_URL)
+db = client[DB_NAME]
+
+# Admin configuration
+ADMIN_COMMISSION = 0.10  # 10%
+
 # Mount Uploads directory for static access
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 api_router = APIRouter(prefix="/api")
 
@@ -2218,16 +2237,34 @@ async def upload_thumbnail(file: UploadFile = File(...), current_user: User = De
             file_extension = ".png" # Default
             
         unique_filename = f"{uuid.uuid4()}{file_extension}"
+        
+        # Ensure directory exists at runtime
+        THUMBNAIL_DIR.mkdir(parents=True, exist_ok=True)
         file_path = THUMBNAIL_DIR / unique_filename
         
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
+        logging.info(f"Uploading thumbnail to: {file_path}")
+        
+        try:
+            with open(file_path, "wb") as buffer:
+                # Use shutil.copyfileobj to handle large files efficiently
+                shutil.copyfileobj(file.file, buffer)
             
-        return {"url": f"/uploads/thumbnails/{unique_filename}"}
+            # Reset file pointer just in case it's needed elsewhere
+            await file.seek(0)
+            
+            logger.info(f"Thumbnail uploaded successfully: {unique_filename}")
+            return {"url": f"/uploads/thumbnails/{unique_filename}"}
+        except Exception as file_io_err:
+            logger.error(f"File IO Error during thumbnail upload: {str(file_io_err)}")
+            logger.error(traceback.format_exc())
+            raise HTTPException(status_code=500, detail=f"File system error: {str(file_io_err)}")
+            
+    except HTTPException:
+        raise
     except Exception as e:
-        logging.error(f"Thumbnail upload failed: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to upload thumbnail")
+        logger.error(f"Thumbnail upload failed with unexpected error: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Failed to upload thumbnail: {str(e)}")
 
 
 @api_router.post("/upload/lesson-pdf")
@@ -2240,16 +2277,34 @@ async def upload_lesson_pdf(file: UploadFile = File(...), current_user: User = D
     
     try:
         unique_filename = f"{uuid.uuid4()}.pdf"
+        
+        # Ensure directory exists at runtime
+        PDF_DIR.mkdir(parents=True, exist_ok=True)
         file_path = PDF_DIR / unique_filename
         
-        with open(file_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
+        logging.info(f"Uploading PDF to: {file_path}")
+        
+        try:
+            with open(file_path, "wb") as buffer:
+                # Use shutil.copyfileobj to handle large files efficiently
+                shutil.copyfileobj(file.file, buffer)
             
-        return {"url": f"/uploads/pdfs/{unique_filename}"}
+            # Reset file pointer just in case it's needed elsewhere
+            await file.seek(0)
+            
+            logger.info(f"PDF uploaded successfully: {unique_filename}")
+            return {"url": f"/uploads/pdfs/{unique_filename}"}
+        except Exception as file_io_err:
+            logger.error(f"File IO Error during PDF upload: {str(file_io_err)}")
+            logger.error(traceback.format_exc())
+            raise HTTPException(status_code=500, detail=f"File system error: {str(file_io_err)}")
+            
+    except HTTPException:
+        raise
     except Exception as e:
-        logging.error(f"PDF upload failed: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to upload PDF")
+        logger.error(f"PDF upload failed with unexpected error: {str(e)}")
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Failed to upload PDF: {str(e)}")
 
 
 @api_router.post("/ai/tutor")
@@ -2889,42 +2944,11 @@ async def delete_review(review_id: str, current_user: User = Depends(get_current
 
 
 
-# Static Files
-UPLOAD_DIR = ROOT_DIR / "uploads"
-THUMBNAIL_DIR = UPLOAD_DIR / "thumbnails"
-PDF_DIR = UPLOAD_DIR / "pdfs"
-UPLOAD_DIR.mkdir(exist_ok=True)
-THUMBNAIL_DIR.mkdir(exist_ok=True)
-PDF_DIR.mkdir(exist_ok=True)
-
-# Static files mount is done at app creation (line 80)
-
-# Note: Router is included at the very end of the file after all routes are defined
-
-
-# Define allowed origins (Localhost + Your Domain + Railway)
-origins = [
-    "http://localhost:3000",
-    "https://britsyncaiacademy.online",
-    "http://britsyncaiacademy.online",
-    "https://learnhub-production-3604.up.railway.app",
-    "*"  # Optional: Allows everyone (good for debugging, remove later for security)
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 @app.get("/")
 async def root():
     return {"message": "BritSyncAI Academy Backend is running", "docs": "/docs"}
+
 
 @app.get("/")
 async def root():
