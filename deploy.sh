@@ -218,6 +218,7 @@ server {
     server_name ${DOMAIN_NAME} www.${DOMAIN_NAME};
 
     # SSL certificates will be added by Certbot
+    client_max_body_size 20M;
 
     # Security Headers
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -228,6 +229,7 @@ server {
     location /api {
         proxy_pass http://localhost:8001;
         proxy_http_version 1.1;
+        client_max_body_size 20M;
         proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host \$host;

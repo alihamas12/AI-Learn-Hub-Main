@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, Request, BackgroundTasks, File, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -11,6 +11,7 @@ import shutil
 import traceback
 
 import logging
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 import bcrypt
@@ -106,23 +107,68 @@ PDF_DIR.mkdir(parents=True, exist_ok=True)
 # Create the main app
 app = FastAPI(title="BritSyncAI Academy API")
 
-# Define allowed origins (Localhost + Your Domain + Railway)
-origins = [
+# Define allowed origins
+default_origins = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
     "https://britsyncaiacademy.online",
-    "http://britsyncaiacademy.online",
+    "https://www.britsyncaiacademy.online",
+    "https://api.britsyncaiacademy.online",
     "https://learnhub-production-3604.up.railway.app",
-    "*"  # Optional: Allows everyone (good for debugging, remove later for security)
 ]
+
+extra_origins = [
+    o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()
+]
+origins = sorted(set(default_origins + extra_origins))
+origin_regex = os.environ.get(
+    "CORS_ORIGIN_REGEX",
+    r"^https://([a-z0-9-]+\.)?britsyncaiacademy\.online$"
+)
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def ensure_cors_headers(request: Request, call_next):
+    """
+    Ensure CORS headers are present on error responses too.
+    This helps when browser reports generic CORS errors for failed requests.
+    """
+    response = await call_next(request)
+    origin = request.headers.get("origin")
+    if origin and (origin in origins or re.match(origin_regex, origin)):
+        response.headers.setdefault("Access-Control-Allow-Origin", origin)
+        response.headers.setdefault("Access-Control-Allow-Credentials", "true")
+        response.headers.setdefault("Access-Control-Allow-Methods", "*")
+        response.headers.setdefault("Access-Control-Allow-Headers", "*")
+        response.headers.setdefault("Vary", "Origin")
+    return response
+
+
+@app.options("/{full_path:path}")
+async def options_handler(full_path: str, request: Request):
+    origin = request.headers.get("origin", "")
+    headers = {}
+    if origin and (origin in origins or re.match(origin_regex, origin)):
+        headers = {
+            "Access-Control-Allow-Origin": origin,
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+            "Access-Control-Allow-Headers": request.headers.get(
+                "access-control-request-headers", "*"
+            ),
+            "Vary": "Origin",
+        }
+    return Response(status_code=204, headers=headers)
 
 # JWT Configuration
 JWT_SECRET = os.environ.get("JWT_SECRET", "your-secret-key")

@@ -451,6 +451,7 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name yourdomain.com www.yourdomain.com;
+    client_max_body_size 20M;
 
     # SSL Configuration (Certbot will add these)
     ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
@@ -467,6 +468,7 @@ server {
     location /api {
         proxy_pass http://localhost:8001;
         proxy_http_version 1.1;
+        client_max_body_size 20M;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
@@ -515,6 +517,7 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name api.yourdomain.com;
+    client_max_body_size 20M;
 
     ssl_certificate /etc/letsencrypt/live/api.yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/api.yourdomain.com/privkey.pem;
@@ -522,6 +525,7 @@ server {
     location / {
         proxy_pass http://localhost:8001;
         proxy_http_version 1.1;
+        client_max_body_size 20M;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
