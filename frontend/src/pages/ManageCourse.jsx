@@ -16,6 +16,7 @@ import EditCourseDetailsModal from '@/components/instructor/EditCourseDetailsMod
 import { Plus, ArrowLeft, FolderPlus, Video, HelpCircle, Trash2, Edit, Image as ImageIcon, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { getThumbnailUrl } from '@/utils/thumbnailUrl';
+import { prepareThumbnailFile, getUploadErrorMessage } from '@/utils/imageUpload';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -178,8 +179,17 @@ export default function ManageCourse({ user, logout }) {
   };
 
   const handleThumbnailUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const selectedFile = e.target.files[0];
+    e.target.value = '';
+    if (!selectedFile) return;
+
+    let file = selectedFile;
+    try {
+      file = await prepareThumbnailFile(selectedFile);
+    } catch (compressErr) {
+      toast.error('Unable to process image. Please try another file.');
+      return;
+    }
 
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
@@ -207,7 +217,7 @@ export default function ManageCourse({ user, logout }) {
       toast.success('Thumbnail updated successfully!');
       fetchCourseData();
     } catch (error) {
-      toast.error('Failed to upload thumbnail');
+      toast.error(getUploadErrorMessage(error));
       console.error(error);
     } finally {
       setUploadingThumbnail(false);

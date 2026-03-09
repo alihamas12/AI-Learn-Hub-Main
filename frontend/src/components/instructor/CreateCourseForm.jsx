@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { X, Sparkles, Plus, Trash2, ArrowRight, ArrowLeft, Check, BookOpen, Clock, DollarSign, Image as ImageIcon, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { getThumbnailUrl } from '@/utils/thumbnailUrl';
+import { prepareThumbnailFile, getUploadErrorMessage } from '@/utils/imageUpload';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -119,8 +120,17 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
   };
 
   const handleThumbnailUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const selectedFile = e.target.files[0];
+    e.target.value = '';
+    if (!selectedFile) return;
+
+    let file = selectedFile;
+    try {
+      file = await prepareThumbnailFile(selectedFile);
+    } catch (compressErr) {
+      toast.error('Unable to process image. Please try another file.');
+      return;
+    }
 
     const formDataUpload = new FormData();
     formDataUpload.append('file', file);
@@ -138,7 +148,7 @@ export default function CreateCourseForm({ onClose, onSuccess }) {
       setFormData(prev => ({ ...prev, thumbnail: response.data.url })); // store relative path only
       toast.success('Thumbnail uploaded successfully!');
     } catch (error) {
-      toast.error('Failed to upload thumbnail');
+      toast.error(getUploadErrorMessage(error));
       console.error(error);
     } finally {
       setUploadingThumbnail(false);

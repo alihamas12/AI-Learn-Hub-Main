@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { getThumbnailUrl } from '@/utils/thumbnailUrl';
+import { prepareThumbnailFile, getUploadErrorMessage } from '@/utils/imageUpload';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -170,8 +171,17 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
     };
 
     const handleThumbnailUpload = async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        const selectedFile = e.target.files[0];
+        e.target.value = '';
+        if (!selectedFile) return;
+
+        let file = selectedFile;
+        try {
+            file = await prepareThumbnailFile(selectedFile);
+        } catch (compressErr) {
+            toast.error('Unable to process image. Please try another file.');
+            return;
+        }
         const uploadData = new FormData();
         uploadData.append('file', file);
         setUploadingThumbnail(true);
@@ -186,7 +196,7 @@ export default function EditCourseDetailsModal({ open, onOpenChange, course, onS
             setFormData(prev => ({ ...prev, thumbnail: response.data.url })); // store relative path only
             toast.success('Thumbnail uploaded!');
         } catch (error) {
-            toast.error('Upload failed');
+            toast.error(getUploadErrorMessage(error, 'Upload failed'));
         } finally {
             setUploadingThumbnail(false);
         }
