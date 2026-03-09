@@ -60,14 +60,48 @@ stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 # Directory configuration
 ROOT_DIR = Path(__file__).parent
-UPLOAD_DIR = ROOT_DIR / "uploads"
+
+def resolve_upload_dir() -> Path:
+    """
+    Resolve a writable uploads directory.
+    Deployment containers often make the app directory read-only, so we
+    probe multiple candidates and pick the first writable location.
+    """
+    candidates = []
+
+    env_upload_dir = os.environ.get("UPLOAD_DIR")
+    if env_upload_dir:
+        candidates.append(Path(env_upload_dir))
+
+    candidates.extend([
+        ROOT_DIR / "uploads",
+        Path.cwd() / "uploads",
+        Path(tempfile.gettempdir()) / "learnhub_uploads",
+    ])
+
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            probe_file = candidate / f".write_test_{uuid.uuid4().hex}"
+            with open(probe_file, "w", encoding="utf-8") as f:
+                f.write("ok")
+            probe_file.unlink(missing_ok=True)
+            logger.info(f"Using upload directory: {candidate}")
+            return candidate
+        except Exception as err:
+            logger.warning(f"Upload dir not writable ({candidate}): {err}")
+
+    raise RuntimeError(
+        "No writable upload directory found. Set UPLOAD_DIR to a writable path."
+    )
+
+UPLOAD_DIR = resolve_upload_dir()
 THUMBNAIL_DIR = UPLOAD_DIR / "thumbnails"
 PDF_DIR = UPLOAD_DIR / "pdfs"
 
-# Create directories
-UPLOAD_DIR.mkdir(exist_ok=True)
-THUMBNAIL_DIR.mkdir(exist_ok=True)
-PDF_DIR.mkdir(exist_ok=True)
+# Create subdirectories
+THUMBNAIL_DIR.mkdir(parents=True, exist_ok=True)
+PDF_DIR.mkdir(parents=True, exist_ok=True)
 
 # Create the main app
 app = FastAPI(title="BritSyncAI Academy API")
@@ -3197,4 +3231,3 @@ app.include_router(api_router)
 # @app.on_event("shutdown")
 # async def shutdown_db_client():
 #     client.close()
-
