@@ -1761,7 +1761,8 @@ async def validate_coupon(code: str, course_id: str, current_user: User = Depend
     if valid_until.tzinfo is None:
         valid_until = valid_until.replace(tzinfo=timezone.utc)
     
-    if now < valid_from:
+    # Add a 5-minute grace period to handle clock sync issues or immediate testing
+    if now < (valid_from - timedelta(minutes=5)):
         raise HTTPException(status_code=400, detail="Coupon is not yet valid")
     
     if now > valid_until:
@@ -1772,7 +1773,8 @@ async def validate_coupon(code: str, course_id: str, current_user: User = Depend
         raise HTTPException(status_code=400, detail="Coupon usage limit reached")
     
     # Check if applicable to course
-    if coupon['applicable_courses'] is not None and course_id not in coupon['applicable_courses']:
+    # Check if applicable to course (treat None or empty list as all courses)
+    if coupon.get('applicable_courses') and course_id not in coupon['applicable_courses']:
         raise HTTPException(status_code=400, detail="Coupon not applicable to this course")
     
     # Check if user already used this coupon for this course
@@ -1870,9 +1872,11 @@ async def create_checkout(
             if valid_until.tzinfo is None:
                 valid_until = valid_until.replace(tzinfo=timezone.utc)
             
-            if valid_from <= now <= valid_until:
+            # Add a 5-minute grace period to handle clock sync issues or immediate testing
+            if (valid_from - timedelta(minutes=5)) <= now <= valid_until:
                 if coupon['usage_limit'] is None or coupon['used_count'] < coupon['usage_limit']:
-                    if coupon['applicable_courses'] is None or course_id in coupon['applicable_courses']:
+                    # Treat None or empty list as all courses
+                    if not coupon.get('applicable_courses') or course_id in coupon['applicable_courses']:
                         # Check if user already used this coupon
                         existing_usage = await db.coupon_usage.find_one({
                             "coupon_id": coupon['id'],
