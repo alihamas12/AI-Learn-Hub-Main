@@ -12,20 +12,20 @@
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 238 77% 62%;
+    --primary: 215 100% 41%; /* Coursera Blue #0056D2 */
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222 47% 11%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 262 83% 58%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 215 100% 95%; /* Very light blue for soft accents */
+    --accent-foreground: 215 100% 20%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 238 77% 62%;
-    --radius: 1rem;
+    --ring: 215 100% 41%;
+    --radius: 0.75rem; /* Slightly more professional radius */
   }
 
   .dark {
@@ -35,27 +35,27 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 238 77% 62%;
+    --primary: 215 100% 50%;
     --primary-foreground: 222 47% 11%;
     --secondary: 217.2 32.6% 12.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 262 83% 58%;
+    --accent: 215 100% 15%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 238 77% 62%;
+    --ring: 215 100% 50%;
   }
 
   body {
     @apply antialiased scroll-smooth;
     font-family: 'Outfit', 'Inter', sans-serif;
-    background: radial-gradient(circle at top right, hsla(238, 77%, 62%, 0.05), transparent 400px),
-                radial-gradient(circle at bottom left, hsla(262, 83%, 58%, 0.05), transparent 400px);
+    background: radial-gradient(circle at top right, hsla(215, 100%, 41%, 0.03), transparent 400px);
     background-attachment: fixed;
+    background-color: white;
   }
 
   * {
@@ -86,11 +86,11 @@
   }
 
   .mesh-gradient {
-    background-color: hsla(238, 77%, 62%, 1);
+    background-color: hsla(215, 100%, 41%, 1);
     background-image: 
-      radial-gradient(at 0% 0%, hsla(262, 83%, 58%, 1) 0, transparent 50%), 
-      radial-gradient(at 50% 0%, hsla(238, 77%, 62%, 1) 0, transparent 50%), 
-      radial-gradient(at 100% 0%, hsla(320, 83%, 58%, 1) 0, transparent 50%);
+      radial-gradient(at 0% 0%, hsla(215, 100%, 50%, 1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(215, 100% , 41%, 1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(210, 100%, 65%, 1) 0, transparent 50%);
   }
 }
 
@@ -100,8 +100,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
-  50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.4); }
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 86, 210, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(0, 86, 210, 0.4); }
 }
 
 .animate-float {
@@ -113,7 +113,7 @@
 }
 
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-fuchsia-500 font-extrabold;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-800 font-extrabold;
 }
 
 /* Custom Scrollbar */

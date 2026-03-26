@@ -52,12 +52,12 @@ h6 {
   gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #10b981;
+  color: #0056D2;
   text-decoration: none;
 }
 
 .brand-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .navbar-links {
@@ -74,7 +74,7 @@ h6 {
 }
 
 .navbar-links a:hover {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .navbar-actions {
@@ -89,7 +89,7 @@ h6 {
 }
 
 .hero-section {
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  background: linear-gradient(135deg, #E8F0FE 0%, #f0fdf4 100%);
   padding: 6rem 2rem;
   text-align: center;
 }
@@ -101,7 +101,7 @@ h6 {
 
 .hero-title {
   font-size: clamp(2.5rem, 5vw, 4rem);
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 1.5rem;
 }
 
@@ -122,7 +122,7 @@ h6 {
 }
 
 .btn-primary {
-  background: #10b981;
+  background: #0056D2;
   color: white;
   border: none;
   padding: 0.75rem 2rem;
@@ -133,19 +133,19 @@ h6 {
 }
 
 .btn-primary:hover {
-  background: #059669;
+  background: #004BB9;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .btn-outline {
   background: white;
-  color: #10b981;
-  border: 2px solid #10b981;
+  color: #0056D2;
+  border: 2px solid #0056D2;
 }
 
 .btn-outline:hover {
-  background: #ecfdf5;
+  background: #E8F0FE;
 }
 
 /* Stats Section */
@@ -171,7 +171,7 @@ h6 {
 }
 
 .stat-icon {
-  color: #10b981;
+  color: #0056D2;
   width: 3rem;
   height: 3rem;
   margin: 0 auto 1rem;
@@ -179,7 +179,7 @@ h6 {
 
 .stat-card h3 {
   font-size: 2.5rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.5rem;
 }
 
@@ -198,7 +198,7 @@ h6 {
 .section-title {
   font-size: 2.5rem;
   text-align: center;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 3rem;
 }
 
@@ -244,8 +244,8 @@ h6 {
 }
 
 .status-badge.published {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .status-badge.pending {
@@ -275,8 +275,8 @@ h6 {
 
 .course-category {
   display: inline-block;
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;
@@ -306,14 +306,14 @@ h6 {
 .course-price {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #10b981;
+  color: #0056D2;
 }
 
 /* CTA Section */
 .cta-section {
   padding: 6rem 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #0056D2 0%, #004BB9 100%);
   color: white;
 }
 
@@ -362,7 +362,7 @@ h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  background: linear-gradient(135deg, #E8F0FE 0%, #f0fdf4 100%);
   padding: 2rem;
 }
 
@@ -384,12 +384,12 @@ h6 {
   width: 4rem;
   height: 4rem;
   margin: 0 auto 1rem;
-  color: #10b981;
+  color: #0056D2;
 }
 
 .auth-header h1 {
   font-size: 2rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.5rem;
 }
 
@@ -416,7 +416,7 @@ h6 {
 }
 
 .auth-footer a {
-  color: #10b981;
+  color: #0056D2;
   font-weight: 600;
   text-decoration: none;
 }
@@ -444,7 +444,7 @@ h6 {
 
 .catalog-header h1 {
   font-size: 3rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.5rem;
 }
 
@@ -586,7 +586,7 @@ h6 {
 
 .pending-status-card h1 {
   font-size: 2rem;
-  color: #065f46;
+  color: #003E99;
 }
 
 .pending-status-card p {
@@ -626,7 +626,7 @@ h6 {
 
 .dashboard-header h1 {
   font-size: 2rem;
-  color: #065f46;
+  color: #003E99;
 }
 
 .dashboard-stats {
@@ -718,7 +718,7 @@ h6 {
   width: 4rem;
   height: 4rem;
   margin: 0 auto 1rem;
-  color: #10b981;
+  color: #0056D2;
 }
 
 /* ==================== COURSE DETAIL ==================== */
@@ -733,7 +733,7 @@ h6 {
 }
 
 .course-hero {
-  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%);
+  background: linear-gradient(135deg, #E8F0FE 0%, #f0fdf4 100%);
   padding: 4rem 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -743,7 +743,7 @@ h6 {
 
 .course-hero-content h1 {
   font-size: 2.5rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 1rem;
 }
 
@@ -816,29 +816,29 @@ h6 {
 /* Applied Coupon */
 .applied-coupon {
   margin-bottom: 1rem;
-  background: #d1fae5;
+  background: #D0E2FF;
   padding: 0.75rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid #10b981;
+  border: 1px solid #0056D2;
 }
 
 .coupon-success {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #065f46;
+  color: #003E99;
   font-weight: 500;
 }
 
 .coupon-check-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .remove-coupon-link {
   margin-left: auto;
   background: none;
   border: none;
-  color: #059669;
+  color: #004BB9;
   cursor: pointer;
   text-decoration: underline;
   font-size: 0.875rem;
@@ -857,21 +857,21 @@ h6 {
   background: white;
   padding: 1rem 2rem;
   border-radius: 0.5rem;
-  border: 2px solid #10b981;
+  border: 2px solid #0056D2;
   text-align: center;
 }
 
 .price {
   font-size: 2rem;
   font-weight: 700;
-  color: #10b981;
+  color: #0056D2;
 }
 
 .price-with-discount {
   background: white;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  border: 2px solid #10b981;
+  border: 2px solid #0056D2;
 }
 
 .original-price {
@@ -907,12 +907,12 @@ h6 {
 
 .final-price .price {
   font-size: 2.5rem;
-  color: #059669;
+  color: #004BB9;
 }
 
 .savings-text {
   text-align: center;
-  color: #059669;
+  color: #004BB9;
   font-weight: 600;
   font-size: 0.875rem;
 }
@@ -987,7 +987,7 @@ h6 {
 
 .coupon-code {
   font-weight: 600;
-  color: #10b981;
+  color: #0056D2;
   font-family: 'Courier New', monospace;
 }
 
@@ -1007,8 +1007,8 @@ h6 {
 }
 
 .status-badge.active {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .status-badge.inactive {
@@ -1057,7 +1057,7 @@ h6 {
 
 .course-content-section h2 {
   font-size: 2rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 2rem;
 }
 
@@ -1083,8 +1083,8 @@ h6 {
 .lesson-number {
   width: 3rem;
   height: 3rem;
-  background: #ecfdf5;
-  color: #10b981;
+  background: #E8F0FE;
+  color: #0056D2;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1131,7 +1131,7 @@ h6 {
 }
 
 .header-icon {
-  color: #10b981;
+  color: #0056D2;
   margin-bottom: 1rem;
 }
 
@@ -1159,7 +1159,7 @@ h6 {
 
 .status-card.approved {
   border-color: #6ee7b7;
-  background: #ecfdf5;
+  background: #E8F0FE;
 }
 
 .status-card.rejected {
@@ -1176,7 +1176,7 @@ h6 {
 }
 
 .approved .status-icon {
-  color: #059669;
+  color: #004BB9;
 }
 
 .rejected .status-icon {
@@ -1213,7 +1213,7 @@ h6 {
 }
 
 .payment-status.success .payment-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .payment-status.failed .payment-icon,
@@ -1321,12 +1321,12 @@ h6 {
 }
 
 .lesson-item.active {
-  background: #ecfdf5;
-  border: 1px solid #10b981;
+  background: #E8F0FE;
+  border: 1px solid #0056D2;
 }
 
 .lesson-item.completed .icon-completed {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .icon-pending {
@@ -1539,7 +1539,7 @@ h6 {
 }
 
 .welcome-icon {
-  color: #10b981;
+  color: #0056D2;
   margin-bottom: 1rem;
 }
 
@@ -1557,7 +1557,7 @@ h6 {
 }
 
 .message.user {
-  background: #10b981;
+  background: #0056D2;
   color: white;
   margin-left: auto;
 }
@@ -1630,8 +1630,8 @@ h6 {
 }
 
 .status-badge.published {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .status-badge.draft {
@@ -1658,7 +1658,7 @@ h6 {
 .course-manage-card .price {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #10b981;
+  color: #0056D2;
   margin-bottom: 1rem;
 }
 
@@ -1686,19 +1686,19 @@ h6 {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  background: #ecfdf5;
+  background: #E8F0FE;
   padding: 2rem;
   border-radius: 0.75rem;
-  border: 1px solid #10b981;
+  border: 1px solid #0056D2;
 }
 
 .earnings-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .earnings-card h2 {
   font-size: 2rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.25rem;
 }
 
@@ -1836,7 +1836,7 @@ h6 {
 .lesson-number {
   width: 2.5rem;
   height: 2.5rem;
-  background: #10b981;
+  background: #0056D2;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -2069,7 +2069,7 @@ h6 {
 }
 
 .quiz-icon {
-  color: #10b981;
+  color: #0056D2;
   flex-shrink: 0;
 }
 
@@ -2171,13 +2171,13 @@ h6 {
 }
 
 .header-icon {
-  color: #10b981;
+  color: #0056D2;
   margin: 0 auto 1rem;
 }
 
 .application-header h1 {
   font-size: 2.5rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.5rem;
 }
 
@@ -2203,7 +2203,7 @@ h6 {
 }
 
 .benefit-card {
-  background: #ecfdf5;
+  background: #E8F0FE;
   padding: 1.5rem;
   border-radius: 0.75rem;
   text-align: center;
@@ -2211,7 +2211,7 @@ h6 {
 
 .benefit-card h3 {
   font-size: 1.125rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 0.5rem;
 }
 
@@ -2251,7 +2251,7 @@ h6 {
 }
 
 .status-card.approved .status-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .status-card.rejected .status-icon {
@@ -2297,8 +2297,8 @@ h6 {
 }
 
 .sidebar-tab.active {
-  color: #10b981;
-  border-bottom-color: #10b981;
+  color: #0056D2;
+  border-bottom-color: #0056D2;
   background: white;
 }
 
@@ -2393,12 +2393,12 @@ h6 {
 
 .answer-option:hover {
   background: #f3f4f6;
-  border-color: #10b981;
+  border-color: #0056D2;
 }
 
 .answer-option.selected {
-  background: #ecfdf5;
-  border-color: #10b981;
+  background: #E8F0FE;
+  border-color: #0056D2;
 }
 
 .option-marker {
@@ -2416,8 +2416,8 @@ h6 {
 }
 
 .answer-option.selected .option-marker {
-  background: #10b981;
-  border-color: #10b981;
+  background: #0056D2;
+  border-color: #0056D2;
   color: white;
 }
 
@@ -2454,19 +2454,19 @@ h6 {
 }
 
 .question-indicator:hover {
-  border-color: #10b981;
+  border-color: #0056D2;
 }
 
 .question-indicator.active {
-  background: #10b981;
-  border-color: #10b981;
+  background: #0056D2;
+  border-color: #0056D2;
   color: white;
 }
 
 .question-indicator.answered {
-  background: #ecfdf5;
-  border-color: #10b981;
-  color: #10b981;
+  background: #E8F0FE;
+  border-color: #0056D2;
+  color: #0056D2;
 }
 
 /* Quiz Results */
@@ -2486,7 +2486,7 @@ h6 {
 }
 
 .result-icon.success {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .result-icon.warning {
@@ -2509,7 +2509,7 @@ h6 {
 .score-number {
   font-size: 4rem;
   font-weight: 700;
-  color: #10b981;
+  color: #0056D2;
   display: block;
 }
 
@@ -2532,19 +2532,19 @@ h6 {
   background: white;
   padding: 4rem 3rem;
   border-radius: 1.5rem;
-  border: 3px solid #10b981;
+  border: 3px solid #0056D2;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   max-width: 700px;
 }
 
 .certificate-main-icon {
-  color: #10b981;
+  color: #0056D2;
   margin: 0 auto 2rem;
 }
 
 .certificate-display h1 {
   font-size: 2.5rem;
-  color: #065f46;
+  color: #003E99;
   margin-bottom: 1rem;
 }
 
@@ -2557,7 +2557,7 @@ h6 {
 .recipient-name {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #10b981;
+  color: #0056D2;
   margin-bottom: 0.5rem;
 }
 
@@ -2584,7 +2584,7 @@ h6 {
 }
 
 .quiz-icon {
-  color: #10b981;
+  color: #0056D2;
   flex-shrink: 0;
 }
 
@@ -2621,7 +2621,7 @@ h6 {
 }
 
 .class-icon {
-  color: #10b981;
+  color: #0056D2;
   flex-shrink: 0;
 }
 
@@ -2733,7 +2733,7 @@ h6 {
 }
 
 .quick-stat-card .stat-icon {
-  color: #10b981;
+  color: #0056D2;
   flex-shrink: 0;
 }
 
@@ -2796,7 +2796,7 @@ h6 {
 
 .stat-value {
   font-weight: 600;
-  color: #10b981;
+  color: #0056D2;
 }
 
 .management-filters {
@@ -2846,7 +2846,7 @@ h6 {
 .user-avatar {
   width: 2.5rem;
   height: 2.5rem;
-  background: #10b981;
+  background: #0056D2;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -2871,8 +2871,8 @@ h6 {
 }
 
 .role-badge.instructor {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .role-badge.admin {
@@ -2913,8 +2913,8 @@ h6 {
 }
 
 .stat-badge.approved {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .applications-list {
@@ -2946,7 +2946,7 @@ h6 {
 .applicant-avatar {
   width: 3rem;
   height: 3rem;
-  background: #10b981;
+  background: #0056D2;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -3005,11 +3005,11 @@ h6 {
 }
 
 .approve-btn {
-  background: #10b981;
+  background: #0056D2;
 }
 
 .approve-btn:hover {
-  background: #059669;
+  background: #004BB9;
 }
 
 .reject-btn {
@@ -3066,8 +3066,8 @@ h6 {
 }
 
 .earnings-badge {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
   padding: 0.25rem 0.75rem;
   border-radius: 0.25rem;
   font-weight: 600;
@@ -3099,8 +3099,8 @@ h6 {
 }
 
 .metric-card.revenue {
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-  border-color: #10b981;
+  background: linear-gradient(135deg, #E8F0FE 0%, #D0E2FF 100%);
+  border-color: #0056D2;
 }
 
 .metric-card.users {
@@ -3123,7 +3123,7 @@ h6 {
 }
 
 .metric-card.revenue .metric-icon {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .metric-card.users .metric-icon {
@@ -3285,12 +3285,12 @@ h6 {
 }
 
 .tab-btn:hover {
-  color: #10b981;
+  color: #0056D2;
 }
 
 .tab-btn.active {
-  color: #10b981;
-  border-bottom-color: #10b981;
+  color: #0056D2;
+  border-bottom-color: #0056D2;
 }
 
 .pending-courses-section,
@@ -3367,8 +3367,8 @@ h6 {
 }
 
 .price-tag {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
   padding: 0.25rem 0.75rem;
   border-radius: 0.25rem;
   font-size: 0.75rem;
@@ -3452,8 +3452,8 @@ h6 {
 }
 
 .status-badge.published {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .status-badge.rejected {
@@ -3462,8 +3462,8 @@ h6 {
 }
 
 .status-badge.active {
-  background: #d1fae5;
-  color: #065f46;
+  background: #D0E2FF;
+  color: #003E99;
 }
 
 .status-badge.inactive {
@@ -3592,7 +3592,7 @@ h6 {
 .reviewer-avatar {
   width: 3rem;
   height: 3rem;
-  background: #10b981;
+  background: #0056D2;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -3636,7 +3636,7 @@ h6 {
 /* Certificate Cards */
 .certificate-card {
   background: white;
-  border: 2px solid #10b981;
+  border: 2px solid #0056D2;
   border-radius: 1rem;
   padding: 2rem;
   display: flex;
@@ -3760,7 +3760,7 @@ h6 {
 }
 
 .progress-step.completed {
-  color: #059669;
+  color: #004BB9;
 }
 
 .step-icon-wrapper {
@@ -3784,9 +3784,9 @@ h6 {
 }
 
 .progress-step.completed .step-icon-wrapper {
-  background: #ecfdf5;
-  border-color: #10b981;
-  color: #10b981;
+  background: #E8F0FE;
+  border-color: #0056D2;
+  color: #0056D2;
 }
 
 .step-line {
@@ -3800,7 +3800,7 @@ h6 {
 }
 
 .progress-step.completed .step-line {
-  background: #10b981;
+  background: #0056D2;
 }
 
 .wizard-form {
@@ -3916,8 +3916,8 @@ h6 {
 .finish-illustration {
   width: 80px;
   height: 80px;
-  background: #ecfdf5;
-  color: #10b981;
+  background: #E8F0FE;
+  color: #0056D2;
   border-radius: 50%;
   display: flex;
   align-items: center;

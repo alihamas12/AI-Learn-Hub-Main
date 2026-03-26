@@ -121,7 +121,7 @@ export default function InstructorDashboard({ user, logout }) {
             <p className="text-slate-500 mb-8 leading-relaxed">Unfortunately, we couldn't approve your instructor profile at this time.</p>
             <button
               onClick={() => navigate('/dashboard/student')}
-              className="w-full py-3 rounded-2xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 transition-all flex items-center justify-center gap-2 shadow-md"
+              className="w-full py-3 rounded-2xl font-bold bg-primary text-white hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-md"
             >
               Return to Student Dashboard
             </button>
@@ -132,10 +132,10 @@ export default function InstructorDashboard({ user, logout }) {
   }
 
   const statCards = [
-    { icon: BookOpen, label: 'Total Courses', value: stats.courses, sub: `${stats.published} published`, color: 'from-indigo-500 to-indigo-600', testId: 'courses-count' },
-    { icon: Users, label: 'Total Students', value: stats.students, sub: 'Across all courses', color: 'from-violet-500 to-violet-600', testId: 'students-count' },
-    { icon: DollarSign, label: 'Total Earnings', value: `$${stats.earnings.toFixed(2)}`, sub: '90% revenue share', color: 'from-fuchsia-500 to-fuchsia-600', testId: 'earnings-amount' },
-    { icon: TrendingUp, label: 'Published', value: stats.published, sub: `${stats.courses - stats.published} drafts`, color: 'from-purple-500 to-purple-600', testId: 'published-count' },
+    { icon: BookOpen, label: 'Total Courses', value: stats.courses, sub: `${stats.published} published`, color: 'from-blue-500 to-blue-600', testId: 'courses-count' },
+    { icon: Users, label: 'Total Students', value: stats.students, sub: 'Across all courses', color: 'from-blue-600 to-blue-700', testId: 'students-count' },
+    { icon: DollarSign, label: 'Total Earnings', value: `$${stats.earnings.toFixed(2)}`, sub: '90% revenue share', color: 'from-blue-700 to-blue-800', testId: 'earnings-amount' },
+    { icon: TrendingUp, label: 'Published', value: stats.published, sub: `${stats.courses - stats.published} drafts`, color: 'from-blue-800 to-blue-900', testId: 'published-count' },
   ];
 
   return (
@@ -146,16 +146,16 @@ export default function InstructorDashboard({ user, logout }) {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <p className="text-sm font-semibold text-indigo-600 mb-1">Instructor Dashboard</p>
+            <p className="text-sm font-semibold text-primary mb-1">Instructor Dashboard</p>
             <h1 className="text-3xl font-extrabold text-slate-900" data-testid="dashboard-title">
-              Hello, <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">{user?.name?.split(' ')[0]}</span>!
+              Hello, <span className="bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">{user?.name?.split(' ')[0]}</span>!
             </h1>
             <p className="text-slate-500 mt-1">Manage your courses and track your earnings</p>
           </div>
           <button
             data-testid="create-course-btn"
             onClick={() => setShowCreateForm(true)}
-            className="btn-shine flex items-center gap-2 px-6 py-3 rounded-2xl font-bold text-white text-sm bg-gradient-to-r from-indigo-600 to-violet-600 shadow-md shadow-indigo-200/60 hover:shadow-indigo-300/50 transition-all"
+            className="btn-shine flex items-center gap-2 px-6 py-3 rounded-2xl font-bold text-white text-sm bg-primary shadow-md shadow-blue-200/60 hover:shadow-blue-300/50 transition-all"
           >
             <Plus size={18} />
             Create Course
@@ -165,7 +165,7 @@ export default function InstructorDashboard({ user, logout }) {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" data-testid="instructor-stats">
           {statCards.map((s) => (
-            <div key={s.label} className="bg-white rounded-3xl p-5 border border-slate-100 hover:shadow-xl hover:shadow-indigo-50 hover:-translate-y-0.5 transition-all duration-300">
+            <div key={s.label} className="bg-white rounded-3xl p-5 border border-slate-100 hover:shadow-xl hover:shadow-blue-50 hover:-translate-y-0.5 transition-all duration-300">
               <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-4 shadow-md`}>
                 <s.icon size={18} className="text-white" />
               </div>
@@ -179,10 +179,10 @@ export default function InstructorDashboard({ user, logout }) {
         {/* Tabs */}
         <Tabs defaultValue="courses" className="w-full">
           <TabsList className="bg-white border border-slate-200 p-1 rounded-2xl mb-6 w-fit shadow-sm">
-            <TabsTrigger value="courses" data-testid="courses-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
+            <TabsTrigger value="courses" data-testid="courses-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
               My Courses
             </TabsTrigger>
-            <TabsTrigger value="earnings" data-testid="earnings-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-indigo-600 data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
+            <TabsTrigger value="earnings" data-testid="earnings-tab" className="rounded-xl font-semibold text-sm px-5 py-2 data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all">
               Earnings
             </TabsTrigger>
           </TabsList>

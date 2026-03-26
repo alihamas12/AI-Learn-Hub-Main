@@ -26,9 +26,9 @@ export default function LandingPage({ user, logout }) {
 
   const fetchFeaturedCourses = async () => {
     try {
-      // Fetch courses
-      const response = await axios.get(`${API}/courses?status=published`);
-      setCourses(response.data.slice(0, 6));
+      // Fetch courses - updated to use limit and backend sorting
+      const response = await axios.get(`${API}/courses?status=published&limit=6`);
+      setCourses(response.data);
 
       // Fetch real-time stats
       const statsResponse = await axios.get(`${API}/stats`);
@@ -46,10 +46,10 @@ export default function LandingPage({ user, logout }) {
   };
 
   const statItems = [
-    { icon: BookOpen, val: `${stats.courses || '0'}+`, label: 'Expert Courses', color: 'from-indigo-500 to-indigo-600' },
-    { icon: Users, val: `${stats.students || '0'}+`, label: 'Active Students', color: 'from-violet-500 to-violet-600' },
-    { icon: Award, val: `${stats.instructors || '0'}+`, label: 'Top Instructors', color: 'from-fuchsia-500 to-fuchsia-600' },
-    { icon: TrendingUp, val: `${stats.completionRate || '98'}%`, label: 'Completion Rate', color: 'from-purple-500 to-purple-600' },
+    { icon: BookOpen, val: `${stats.courses || '0'}+`, label: 'Expert Courses', color: 'from-blue-500 to-blue-600' },
+    { icon: Users, val: `${stats.students || '0'}+`, label: 'Active Students', color: 'from-blue-600 to-blue-700' },
+    { icon: Award, val: `${stats.instructors || '0'}+`, label: 'Top Instructors', color: 'from-blue-700 to-blue-800' },
+    { icon: TrendingUp, val: `${stats.completionRate || '98'}%`, label: 'Completion Rate', color: 'from-blue-800 to-blue-900' },
   ];
 
   const features = [
@@ -67,8 +67,8 @@ export default function LandingPage({ user, logout }) {
         {/* Background */}
         <div className="absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-50" />
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-indigo-100/80 via-violet-50/50 to-transparent rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-fuchsia-50 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-blue-100/50 via-blue-50/30 to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-blue-50/50 to-transparent rounded-full blur-3xl" />
           {/* Grid pattern */}
           <div
             className="absolute inset-0 opacity-[0.03]"
@@ -80,158 +80,65 @@ export default function LandingPage({ user, logout }) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            {/* Left Copy */}
-            <div className="flex-1 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-6">
+          <div className="flex flex-col items-center text-center">
+            {/* Center Copy */}
+            <div className="max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-6 mx-auto">
                 <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
                 <span className="text-indigo-700 text-sm font-semibold">New Courses Every Week</span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.05] tracking-tight mb-6" data-testid="hero-title">
+              <h1 className="text-5xl md:text-6xl lg:text-8xl font-extrabold text-slate-900 leading-[1.05] tracking-tight mb-8" data-testid="hero-title">
                 Learn Without
                 <br />
-                <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">
                   Limits
                 </span>
               </h1>
 
-              <p className="text-xl text-slate-500 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed" data-testid="hero-subtitle">
+              <p className="text-xl md:text-2xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed" data-testid="hero-subtitle">
                 Master in-demand skills with world-class instructors. Advance your career with practical, project-based learning.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row items-center gap-4 justify-center">
                 <button
                   data-testid="explore-courses-btn"
                   onClick={() => navigate('/courses')}
-                  className="btn-shine group w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-white text-base bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-xl shadow-indigo-200 hover:shadow-indigo-300/50 transition-all duration-300 flex items-center justify-center gap-2"
+                  className="btn-shine group w-full sm:w-auto px-10 py-5 rounded-2xl font-bold text-white text-lg bg-primary hover:bg-blue-700 shadow-xl shadow-blue-200 hover:shadow-blue-300/50 transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   Explore Courses
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 {!user && (
                   <button
                     data-testid="get-started-btn"
                     onClick={() => navigate('/register')}
-                    className="group w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-slate-700 text-base bg-white border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+                    className="group w-full sm:w-auto px-10 py-5 rounded-2xl font-bold text-slate-700 text-lg bg-white border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
                   >
-                    <Play size={16} className="fill-current" />
+                    <Play size={18} className="fill-current" />
                     Start for Free
                   </button>
                 )}
               </div>
 
               {/* Trust Signal */}
-              <div className="flex items-center gap-4 mt-8 justify-center lg:justify-start">
-                <div className="flex -space-x-2.5">
+              <div className="flex flex-col items-center gap-4 mt-12">
+                <div className="flex -space-x-3">
                   {['I', 'J', 'K', 'L', 'M'].map((l) => (
-                    <div key={l} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-violet-500 border-2 border-white flex items-center justify-center text-[10px] font-bold text-white">
+                    <div key={l} className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-white flex items-center justify-center text-xs font-bold text-white shadow-sm">
                       {l}
                     </div>
                   ))}
                 </div>
                 <div>
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={12} className="fill-amber-400 text-amber-400" />)}
-                    <span className="text-slate-700 font-bold text-sm ml-1">4.9</span>
+                  <div className="flex items-center justify-center gap-1 mb-1">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-amber-400 text-amber-400" />)}
+                    <span className="text-slate-800 font-bold ml-1">4.9/5</span>
                   </div>
-                  <p className="text-slate-500 text-xs">Trusted by 10,000+ learners</p>
+                  <p className="text-slate-500 text-sm">Trusted by 10,000+ learners worldwide</p>
                 </div>
               </div>
             </div>
-
-            {/* Right Visual */}
-            <div className="flex-1 relative w-full max-w-md lg:max-w-none">
-              <div className="relative">
-                {/* Main Card */}
-                <div className="bg-white rounded-3xl p-6 shadow-2xl shadow-indigo-100/80 border border-slate-100 relative">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-2">
-                      <img src={logo} alt="User Avatar" className="w-8 h-8 rounded-lg object-contain bg-white shadow-sm" />
-                      <span className="font-bold text-slate-800 text-sm">My Learning</span>
-                    </div>
-                    <span className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2.5 py-1 rounded-full">3 Active</span>
-                  </div>
-
-                  {/* Progress Items */}
-                  {[
-                    { name: 'React Development', progress: 78, color: 'from-indigo-500 to-violet-500' },
-                    { name: 'UI/UX Design', progress: 52, color: 'from-fuchsia-500 to-pink-500' },
-                    { name: 'Data Science', progress: 31, color: 'from-violet-500 to-purple-500' },
-                  ].map((c) => (
-                    <div key={c.name} className="mb-4 last:mb-0">
-                      <div className="flex justify-between items-center mb-1.5">
-                        <span className="text-slate-700 text-sm font-medium">{c.name}</span>
-                        <span className="text-slate-500 text-xs font-semibold">{c.progress}%</span>
-                      </div>
-                      <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full bg-gradient-to-r ${c.color} transition-all`}
-                          style={{ width: `${c.progress}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Floating Badge */}
-                <div className="absolute -top-4 -right-4 bg-white rounded-2xl px-4 py-3 shadow-xl border border-slate-100 flex items-center gap-2">
-                  <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Award size={16} className="text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-slate-800">Certificate Earned!</p>
-                    <p className="text-xs text-slate-500">Web Design Pro</p>
-                  </div>
-                </div>
-
-                {/* Floating Live Count */}
-                <div className="absolute -bottom-4 -left-4 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <p className="text-white text-xs font-bold">2,400 learning now</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className="py-16 bg-slate-900" data-testid="stats-section">
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {statItems.map((s, i) => (
-            <div key={i} className="text-center" data-testid={`stat-${i}`}>
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mx-auto mb-3 shadow-lg`}>
-                <s.icon size={20} className="text-white" />
-              </div>
-              <div className="text-3xl font-extrabold text-white mb-1">{s.val}</div>
-              <div className="text-slate-400 text-sm font-medium">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── FEATURES ── */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-4">
-              <span className="text-indigo-700 text-sm font-semibold">Why AI LearnHub?</span>
-            </div>
-            <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Built for real results</h2>
-            <p className="text-slate-500 text-lg max-w-xl mx-auto">Everything you need to go from beginner to expert, in one platform.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((f, i) => (
-              <div key={i} className="p-8 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-indigo-50 hover:border-indigo-200 transition-all duration-300 group">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-md">
-                  <f.icon size={20} className="text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
-                <p className="text-slate-500 leading-relaxed">{f.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -258,7 +165,7 @@ export default function LandingPage({ user, logout }) {
             {courses?.map((course) => (
               <div
                 key={course.id}
-                className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-indigo-100/60 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                className="group bg-white rounded-3xl overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-blue-100/60 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 onClick={() => navigate(`/course/${course.id}`)}
                 data-testid={`course-card-${course.id}`}
               >
@@ -300,12 +207,51 @@ export default function LandingPage({ user, logout }) {
         </div>
       </section>
 
+      {/* ── STATS ── */}
+      <section className="py-16 bg-slate-900" data-testid="stats-section">
+        <div className="max-w-6xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {statItems.map((s, i) => (
+            <div key={i} className="text-center" data-testid={`stat-${i}`}>
+              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mx-auto mb-3 shadow-lg`}>
+                <s.icon size={20} className="text-white" />
+              </div>
+              <div className="text-3xl font-extrabold text-white mb-1">{s.val}</div>
+              <div className="text-slate-400 text-sm font-medium">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FEATURES ── */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-14">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-4">
+              <span className="text-indigo-700 text-sm font-semibold">Why AI LearnHub?</span>
+            </div>
+            <h2 className="text-4xl font-extrabold text-slate-900 mb-4">Built for real results</h2>
+            <p className="text-slate-500 text-lg max-w-xl mx-auto">Everything you need to go from beginner to expert, in one platform.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((f, i) => (
+              <div key={i} className="p-8 rounded-3xl border border-slate-100 bg-white hover:shadow-xl hover:shadow-indigo-50 hover:border-indigo-200 transition-all duration-300 group">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-sm">
+                  <f.icon size={20} className="text-primary" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{f.title}</h3>
+                <p className="text-slate-500 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── BLOG ── */}
       <div className="py-24 bg-white"><BlogSection /></div>
 
       {/* ── CTA ── */}
       <section className="py-24 relative overflow-hidden" data-testid="cta-section">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0056D2 0%, #003E99 100%)' }} />
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
         <div
@@ -324,7 +270,7 @@ export default function LandingPage({ user, logout }) {
             <button
               data-testid="browse-courses-btn"
               onClick={() => navigate('/courses')}
-              className="group px-8 py-4 bg-white text-indigo-700 font-bold text-base rounded-2xl hover:bg-indigo-50 shadow-xl hover:shadow-2xl transition-all flex items-center gap-2"
+              className="group px-8 py-4 bg-white text-primary font-bold text-base rounded-2xl hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all flex items-center gap-2"
             >
               Browse All Courses
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

@@ -82,7 +82,7 @@ export default function CertificatePage() {
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-                <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+                <Loader2 className="w-12 h-12 text-primary animate-spin" />
             </div>
         );
     }
@@ -91,7 +91,7 @@ export default function CertificatePage() {
         return (
             <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
                 <h1 className="text-2xl font-bold text-slate-800 mb-4">Certificate Not Found</h1>
-                <Link to="/dashboard/student" className="text-indigo-600 hover:underline flex items-center gap-2">
+                <Link to="/dashboard/student" className="text-primary hover:underline flex items-center gap-2">
                     <ChevronLeft size={20} /> Back to Dashboard
                 </Link>
             </div>
@@ -128,7 +128,7 @@ export default function CertificatePage() {
                     <button
                         onClick={handleDownload}
                         disabled={downloading}
-                        className="flex items-center gap-2 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-lg shadow-indigo-100 transition-all disabled:opacity-50"
+                        className="flex items-center gap-2 px-6 py-2 bg-primary hover:bg-blue-800 text-white font-bold rounded-lg shadow-lg shadow-blue-100 transition-all disabled:opacity-50"
                     >
                         <Download size={18} />
                         {downloading ? 'Preparing...' : 'Download PNG'}

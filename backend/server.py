@@ -994,6 +994,8 @@ async def get_courses(
     status: Optional[str] = "published",
     search: Optional[str] = None,
     instructor_id: Optional[str] = None,
+    featured: Optional[bool] = None,
+    limit: int = 1000,
     token: Optional[str] = None
 ):
     current_user = await get_optional_user(request)
@@ -1012,6 +1014,9 @@ async def get_courses(
     if category:
         query['category'] = category
         
+    if featured is not None:
+        query['is_featured'] = featured
+
     # Security: Only admins or owners can see non-published courses
     if status == 'all' or status == 'draft':
         if not current_user:
@@ -1042,7 +1047,9 @@ async def get_courses(
             {"description": {"$regex": search, "$options": "i"}}
         ]
     
-    courses = await db.courses.find(query, {"_id": 0}).to_list(1000)
+    # Sort by created_at descending by default
+    cursor = db.courses.find(query, {"_id": 0}).sort("created_at", -1)
+    courses = await cursor.to_list(limit)
     return courses
 
 

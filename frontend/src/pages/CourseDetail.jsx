@@ -115,7 +115,7 @@ export default function CourseDetail({ user, logout }) {
       <Navbar user={user} logout={logout} />
       <div className="max-w-7xl mx-auto px-4 py-24 text-center">
         <h2 className="text-2xl font-bold text-slate-800 mb-4">Course not found</h2>
-        <button onClick={() => navigate('/courses')} className="text-indigo-600 font-semibold hover:underline">← Back to Courses</button>
+        <button onClick={() => navigate('/courses')} className="text-primary font-semibold hover:underline">← Back to Courses</button>
       </div>
     </div>
   );
@@ -134,8 +134,8 @@ export default function CourseDetail({ user, logout }) {
       {/* ── Hero Banner ── */}
       <div className="bg-slate-900 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-600/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-900/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
@@ -151,7 +151,7 @@ export default function CourseDetail({ user, logout }) {
             {/* Left: Info */}
             <div className="flex-1 space-y-5">
               <span
-                className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600/30 text-indigo-300 text-xs font-bold rounded-full border border-indigo-500/30"
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/30 text-blue-100 text-xs font-bold rounded-full border border-blue-500/30"
                 data-testid="course-category"
               >
                 <Tag size={12} /> {course.category}
@@ -180,7 +180,7 @@ export default function CourseDetail({ user, logout }) {
               {/* Meta pills */}
               <div className="flex flex-wrap items-center gap-3 text-sm font-medium" data-testid="course-meta">
                 <div className="flex items-center gap-2 px-3.5 py-2 bg-white/10 text-slate-300 rounded-xl border border-white/10">
-                  <BookOpen size={15} className="text-indigo-400" />
+                  <BookOpen size={15} className="text-blue-400" />
                   <span data-testid="lessons-count">{lessons.length} Lessons</span>
                 </div>
                 <div className="flex items-center gap-2 px-3.5 py-2 bg-white/10 text-slate-300 rounded-xl border border-white/10">
@@ -230,7 +230,7 @@ export default function CourseDetail({ user, logout }) {
             <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
               <div className="flex items-center justify-between px-7 py-5 border-b border-slate-100">
                 <h2 className="text-xl font-extrabold text-slate-900">Course Content</h2>
-                <span className="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                <span className="text-sm font-semibold text-primary bg-blue-50 px-3 py-1 rounded-full">
                   {lessons.length} lessons
                 </span>
               </div>
@@ -244,11 +244,11 @@ export default function CourseDetail({ user, logout }) {
                       className="flex items-center gap-4 px-7 py-4 hover:bg-slate-50 transition-colors group"
                       data-testid={`lesson-${lesson.id}`}
                     >
-                      <div className="w-9 h-9 shrink-0 rounded-xl bg-indigo-50 text-indigo-600 font-bold text-sm flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                      <div className="w-9 h-9 shrink-0 rounded-xl bg-blue-50 text-primary font-bold text-sm flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors">{lesson.title}</h4>
+                        <h4 className="font-semibold text-slate-800 text-sm group-hover:text-primary transition-colors">{lesson.title}</h4>
                         <div className="flex items-center gap-3 mt-0.5">
                           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-0.5 bg-slate-100 rounded-md">{lesson.type}</span>
                           {lesson.duration && (
@@ -258,7 +258,7 @@ export default function CourseDetail({ user, logout }) {
                           )}
                         </div>
                       </div>
-                      <Play size={14} className="text-slate-300 group-hover:text-indigo-500 transition-colors shrink-0" />
+                      <Play size={14} className="text-slate-300 group-hover:text-primary transition-colors shrink-0" />
                     </div>
                   ))
                 )}
@@ -291,7 +291,7 @@ export default function CourseDetail({ user, logout }) {
                   <button
                     data-testid="start-learning-btn"
                     onClick={() => navigate(`/course/${id}/learn`)}
-                    className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all flex items-center justify-center gap-2"
+                    className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-primary hover:bg-blue-700 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all flex items-center justify-center gap-2"
                   >
                     <Play size={16} className="fill-white" /> Continue Learning
                   </button>
@@ -335,7 +335,7 @@ export default function CourseDetail({ user, logout }) {
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                           disabled={validatingCoupon}
-                          className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                          className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 text-sm font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                         />
                         <button
                           data-testid="apply-coupon-btn"
@@ -368,7 +368,7 @@ export default function CourseDetail({ user, logout }) {
                     data-testid="enroll-btn"
                     onClick={handleEnroll}
                     disabled={enrolling}
-                    className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-primary hover:bg-blue-700 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all flex items-center justify-center gap-2 disabled:opacity-60"
                   >
                     {enrolling
                       ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -386,8 +386,8 @@ export default function CourseDetail({ user, logout }) {
                 <div className="space-y-3">
                   {includes.map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-center gap-3 text-sm text-slate-600">
-                      <div className="w-8 h-8 bg-indigo-50 rounded-xl flex items-center justify-center shrink-0">
-                        <Icon size={14} className="text-indigo-600" />
+                      <div className="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                        <Icon size={14} className="text-primary" />
                       </div>
                       {text}
                     </div>
@@ -396,12 +396,12 @@ export default function CourseDetail({ user, logout }) {
               </div>
 
               {/* Guarantee */}
-              <div className="bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl p-6 text-white">
+              <div className="bg-gradient-to-br from-primary to-blue-800 rounded-3xl p-6 text-white">
                 <div className="flex items-center gap-3 mb-3">
-                  <Shield size={20} className="text-indigo-200" />
+                  <Shield size={20} className="text-blue-200" />
                   <h3 className="font-extrabold">Satisfaction Guaranteed</h3>
                 </div>
-                <p className="text-indigo-200 text-sm leading-relaxed">
+                <p className="text-blue-100 text-sm leading-relaxed">
                   Not satisfied? Get a full refund within 30 days. No questions asked.
                 </p>
               </div>

@@ -69,14 +69,14 @@ export default function PaymentSuccess({ user, logout }) {
 
         {status === 'checking' && (
           <div data-testid="payment-checking" className="bg-white rounded-3xl border border-slate-100 shadow-sm p-12">
-            <div className="w-20 h-20 bg-indigo-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <Loader2 size={36} className="text-indigo-500 animate-spin" />
+            <div className="w-20 h-20 bg-blue-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <Loader2 size={36} className="text-primary animate-spin" />
             </div>
             <h1 className="text-2xl font-extrabold text-slate-900 mb-3">Verifying Payment…</h1>
             <p className="text-slate-500">Please wait while we confirm your payment</p>
             <div className="mt-6 flex justify-center gap-1.5">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i < attempts ? 'bg-indigo-500' : 'bg-slate-200'}`} />
+                <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i < attempts ? 'bg-primary' : 'bg-slate-200'}`} />
               ))}
             </div>
           </div>
@@ -93,14 +93,14 @@ export default function PaymentSuccess({ user, logout }) {
               <button
                 data-testid="start-learning-btn"
                 onClick={() => { if (courseId) navigate(`/course/${courseId}/learn`); else navigate('/dashboard/student'); }}
-                className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all flex items-center justify-center gap-2"
+                className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-blue-800 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all flex items-center justify-center gap-2"
               >
                 <Play size={16} className="fill-white" /> Start Learning Now
               </button>
               <button
                 data-testid="view-dashboard-btn"
                 onClick={() => navigate('/dashboard/student')}
-                className="w-full py-3.5 rounded-2xl font-bold text-slate-600 border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-2xl font-bold text-slate-600 border-2 border-slate-200 hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2"
               >
                 <LayoutDashboard size={16} /> View Dashboard
               </button>
@@ -118,7 +118,7 @@ export default function PaymentSuccess({ user, logout }) {
             <button
               data-testid="back-to-courses-btn"
               onClick={() => navigate('/courses')}
-              className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg flex items-center justify-center gap-2"
+              className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-blue-800 shadow-lg flex items-center justify-center gap-2"
             >
               Browse Courses <ArrowRight size={16} />
             </button>

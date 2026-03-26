@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
+const COLORS = ['#0056D2', '#003E99', '#0070F3', '#60A5FA', '#93C5FD'];
 
 export default function PlatformAnalytics() {
   const [analytics, setAnalytics] = useState(null);
@@ -113,7 +113,7 @@ export default function PlatformAnalytics() {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="value" fill="#10b981" />
+              <Bar dataKey="value" fill="#0056D2" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -129,7 +129,7 @@ export default function PlatformAnalytics() {
                 labelLine={false}
                 label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 outerRadius={100}
-                fill="#8884d8"
+                fill="#0056D2"
                 dataKey="value"
               >
                 {statusData.map((entry, index) => (

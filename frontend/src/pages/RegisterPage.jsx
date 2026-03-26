@@ -66,12 +66,12 @@ export default function RegisterPage({ setUser }) {
                     type="button"
                     onClick={() => setFormData({ ...formData, role: value })}
                     className={`p-4 rounded-2xl border-2 text-left transition-all duration-200 ${formData.role === value
-                      ? 'border-indigo-500 bg-indigo-50 shadow-md shadow-indigo-100'
+                      ? 'border-primary bg-blue-50 shadow-md shadow-blue-100'
                       : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'
                       }`}
                     data-testid={`role-${value}`}
                   >
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-2 ${formData.role === value ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center mb-2 ${formData.role === value ? 'bg-primary text-white' : 'bg-slate-200 text-slate-500'
                       }`}>
                       <Icon size={16} />
                     </div>
@@ -91,7 +91,7 @@ export default function RegisterPage({ setUser }) {
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="John Doe"
                     data-testid="name-input"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                   />
                 </div>
               </div>
@@ -133,7 +133,7 @@ export default function RegisterPage({ setUser }) {
               <button
                 type="submit" disabled={loading}
                 data-testid="register-submit-btn"
-                className="btn-shine w-full py-3.5 rounded-xl font-bold text-white text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
+                className="btn-shine w-full py-3.5 rounded-xl font-bold text-white text-sm bg-primary hover:bg-blue-700 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all duration-300 disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
               >
                 {loading
                   ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -145,7 +145,7 @@ export default function RegisterPage({ setUser }) {
             <div className="mt-6 pt-6 border-t border-slate-100 text-center">
               <p className="text-sm text-slate-500">
                 Already have an account?{' '}
-                <Link to="/login" data-testid="login-link" className="font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                <Link to="/login" data-testid="login-link" className="font-bold text-primary hover:text-blue-700 transition-colors">
                   Sign in →
                 </Link>
               </p>
@@ -156,9 +156,9 @@ export default function RegisterPage({ setUser }) {
 
       {/* Right Panel */}
       <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden flex-col">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #0056D2 0%, #003E99 100%)' }} />
         <div className="absolute top-[-20%] right-[-20%] w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-[-20%] left-[-20%] w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
+        <div className="absolute bottom-[-20%] left-[-20%] w-80 h-80 bg-blue-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }} />
 
         <div className="relative z-10 flex flex-col justify-between p-12 h-full">
           <Link to="/" className="flex items-center gap-3">
@@ -168,7 +168,7 @@ export default function RegisterPage({ setUser }) {
 
           <div className="space-y-6">
             <h2 className="text-5xl font-extrabold text-white leading-tight">
-              Start Your<br /><span className="text-indigo-200">Journey Today</span>
+              Start Your<br /><span className="text-blue-200">Journey Today</span>
             </h2>
             <p className="text-white/75 text-lg leading-relaxed max-w-sm">
               Get unlimited access to expert-led courses and take your skills to the next level.
@@ -185,7 +185,7 @@ export default function RegisterPage({ setUser }) {
 
           <div className="p-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
             <p className="text-white/80 text-sm italic">"BritSyncAI Academy changed how I approach learning. The courses are world-class!"</p>
-            <p className="text-indigo-200 text-xs font-semibold mt-2">— Sarah K., Software Engineer</p>
+            <p className="text-blue-200 text-xs font-semibold mt-2">— Sarah K., Software Engineer</p>
           </div>
         </div>
       </div>

@@ -389,7 +389,7 @@ export default function ManageCourse({ user, logout }) {
                           {quizzes.filter(q => q.section_id === section.id).map(quiz => (
                             <div key={quiz.id} className="quiz-item-nested" data-testid={`section-quiz-${quiz.id}`}>
                               <div className="flex items-center">
-                                <HelpCircle size={18} className="text-indigo-500 mr-2" />
+                                <HelpCircle size={18} className="text-primary mr-2" />
                                 <span>Quiz: {quiz.title}</span>
                               </div>
                               <div className="flex gap-1">
@@ -428,7 +428,7 @@ export default function ManageCourse({ user, logout }) {
                         {quizzes.filter(q => !q.section_id).map(quiz => (
                           <div key={quiz.id} className="quiz-item-nested" data-testid={`standalone-quiz-${quiz.id}`}>
                             <div className="flex items-center">
-                              <HelpCircle size={18} className="text-indigo-500 mr-2" />
+                              <HelpCircle size={18} className="text-primary mr-2" />
                               <span>Quiz: {quiz.title}</span>
                             </div>
                             <div className="flex gap-1">
@@ -596,7 +596,7 @@ export default function ManageCourse({ user, logout }) {
                     variant="outline"
                     size="sm"
                     onClick={() => setShowEditDetails(true)}
-                    className="flex items-center gap-2 rounded-xl border-slate-200 hover:border-indigo-200 hover:text-indigo-600 shadow-sm"
+                    className="flex items-center gap-2 rounded-xl border-slate-200 hover:border-primary/30 hover:text-primary shadow-sm"
                   >
                     <Edit size={14} />
                     Edit Details

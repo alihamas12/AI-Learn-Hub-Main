@@ -22,13 +22,13 @@ export default function PaymentCancel({ user, logout }) {
             <button
               data-testid="back-to-courses-btn"
               onClick={() => navigate('/courses')}
-              className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all flex items-center justify-center gap-2"
+              className="btn-shine w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-primary to-blue-800 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all flex items-center justify-center gap-2"
             >
               Browse Courses <ArrowRight size={16} />
             </button>
             <button
               onClick={() => navigate(-1)}
-              className="w-full py-3.5 rounded-2xl font-bold text-slate-600 border-2 border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-2xl font-bold text-slate-600 border-2 border-slate-200 hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2"
             >
               <ArrowLeft size={16} /> Go Back
             </button>

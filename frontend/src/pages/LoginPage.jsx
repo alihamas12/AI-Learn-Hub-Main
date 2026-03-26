@@ -43,13 +43,13 @@ export default function LoginPage({ setUser }) {
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%)',
+            background: 'linear-gradient(135deg, #0056D2 0%, #003E99 100%)',
           }}
         />
         {/* Decorative Orbs */}
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-indigo-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-violet-400/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '4s' }} />
+        <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-blue-300/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-400/10 rounded-full blur-2xl animate-float" style={{ animationDelay: '4s' }} />
 
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           {/* Logo */}
@@ -65,7 +65,7 @@ export default function LoginPage({ setUser }) {
             </div>
             <h2 className="text-5xl font-extrabold text-white leading-tight">
               Unlock Your<br />
-              <span className="text-indigo-200">Full Potential</span>
+              <span className="text-blue-200">Full Potential</span>
             </h2>
             <p className="text-white/75 text-lg leading-relaxed max-w-sm">
               Join thousands of learners building world-class skills with expert instructors.
@@ -77,7 +77,7 @@ export default function LoginPage({ setUser }) {
                 {['A', 'B', 'C', 'D'].map((l) => (
                   <div
                     key={l}
-                    className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-900 shadow"
+                    className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-300 to-blue-500 border-2 border-white flex items-center justify-center text-xs font-bold text-blue-900 shadow"
                   >
                     {l}
                   </div>
@@ -133,7 +133,7 @@ export default function LoginPage({ setUser }) {
                     placeholder="you@example.com"
                     required
                     data-testid="email-input"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                   />
                 </div>
               </div>
@@ -145,7 +145,7 @@ export default function LoginPage({ setUser }) {
                   <Link
                     to="/forgot-password"
                     data-testid="forgot-password-link"
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="text-xs font-semibold text-primary hover:text-blue-700 transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -160,7 +160,7 @@ export default function LoginPage({ setUser }) {
                     placeholder="••••••••"
                     required
                     data-testid="password-input"
-                    className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                    className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                   />
                   <button
                     type="button"
@@ -177,7 +177,7 @@ export default function LoginPage({ setUser }) {
                 type="submit"
                 disabled={loading}
                 data-testid="login-submit-btn"
-                className="btn-shine w-full py-3.5 rounded-xl font-bold text-white text-sm bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-200 hover:shadow-indigo-300/60 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="btn-shine w-full py-3.5 rounded-xl font-bold text-white text-sm bg-primary hover:bg-blue-700 shadow-lg shadow-blue-200 hover:shadow-blue-300/60 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -194,7 +194,7 @@ export default function LoginPage({ setUser }) {
                 <Link
                   to="/register"
                   data-testid="register-link"
-                  className="font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+                  className="font-bold text-primary hover:text-blue-700 transition-colors"
                 >
                   Create one free →
                 </Link>

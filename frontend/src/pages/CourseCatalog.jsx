@@ -68,16 +68,16 @@ export default function CourseCatalog({ user, logout }) {
       {/* Page Header with gradient */}
       <div className="relative overflow-hidden bg-white border-b border-slate-100">
         <div className="absolute inset-0 -z-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-violet-50 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-slate-100 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-full mb-4">
-            <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
-            <span className="text-indigo-700 text-sm font-semibold">{courses.length} Courses Available</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-4">
+            <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+            <span className="text-primary text-sm font-semibold">{courses.length} Courses Available</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-3" data-testid="catalog-title">
-            Explore <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">All Courses</span>
+            Explore <span className="bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">All Courses</span>
           </h1>
           <p className="text-slate-500 text-lg max-w-xl">Discover expert-led courses across every topic. Learn at your own pace.</p>
         </div>
@@ -96,7 +96,7 @@ export default function CourseCatalog({ user, logout }) {
                 placeholder="Search courses by title or topic..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition-all"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
               />
             </div>
             {/* Active filter count display */}
@@ -153,14 +153,14 @@ export default function CourseCatalog({ user, logout }) {
           </div>
         ) : filteredCourses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 bg-white rounded-3xl border border-slate-100 text-center" data-testid="no-courses">
-            <div className="w-16 h-16 bg-indigo-50 rounded-3xl flex items-center justify-center mb-5">
-              <BookOpen size={28} className="text-indigo-400" />
+            <div className="w-16 h-16 bg-blue-50 rounded-3xl flex items-center justify-center mb-5">
+              <BookOpen size={28} className="text-primary opacity-60" />
             </div>
             <h3 className="text-xl font-bold text-slate-800 mb-2">No courses found</h3>
             <p className="text-slate-500 mb-6">Try adjusting your search or category filter</p>
             <button
               onClick={() => { setSearch(''); setCategory('all'); }}
-              className="px-6 py-3 rounded-2xl font-bold text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-md"
+              className="px-6 py-3 rounded-2xl font-bold text-white bg-primary hover:bg-blue-700 shadow-md"
             >
               Clear Filters
             </button>
@@ -170,12 +170,12 @@ export default function CourseCatalog({ user, logout }) {
             {filteredCourses.map((course) => (
               <div
                 key={course.id}
-                className="group bg-white rounded-3xl border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-indigo-100/60 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
+                className="group bg-white rounded-3xl border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-blue-100/60 hover:-translate-y-1.5 transition-all duration-300 cursor-pointer"
                 onClick={() => navigate(`/course/${course.id}`)}
                 data-testid={`course-card-${course.id}`}
               >
                 {/* Thumbnail */}
-                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-indigo-100 to-violet-100">
+                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-50 to-slate-100">
                   <img
                     src={getThumbnailUrl(course.thumbnail)}
                     alt={course.title}
@@ -183,14 +183,14 @@ export default function CourseCatalog({ user, logout }) {
                     onError={(e) => { e.target.onerror = null; e.target.src = '/placeholder-course.png'; }}
                   />
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-5">
-                    <span className="bg-white text-indigo-700 font-bold text-sm px-5 py-2 rounded-full shadow-lg flex items-center gap-1.5">
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-end justify-center pb-5">
+                    <span className="bg-white text-primary font-bold text-sm px-5 py-2 rounded-full shadow-lg flex items-center gap-1.5">
                       View Course <ArrowRight size={14} />
                     </span>
                   </div>
                   {/* Category badge */}
                   <div className="absolute top-3 left-3">
-                    <span className="text-xs font-bold px-3 py-1 bg-white/90 backdrop-blur-sm text-indigo-700 rounded-full border border-white/50 shadow-sm">
+                    <span className="text-xs font-bold px-3 py-1 bg-white/90 backdrop-blur-sm text-primary rounded-full border border-white/50 shadow-sm">
                       {course.category}
                     </span>
                   </div>
@@ -198,7 +198,7 @@ export default function CourseCatalog({ user, logout }) {
 
                 {/* Content */}
                 <div className="p-5">
-                  <h3 className="font-bold text-slate-900 text-base mb-1.5 line-clamp-2 group-hover:text-indigo-600 transition-colors leading-snug">
+                  <h3 className="font-bold text-slate-900 text-base mb-1.5 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
                     {course.title}
                   </h3>
                   <p className="text-slate-500 text-sm line-clamp-2 mb-4 leading-relaxed">{course.description}</p>
@@ -210,7 +210,7 @@ export default function CourseCatalog({ user, logout }) {
                       ))}
                       <span className="text-xs font-semibold text-slate-600 ml-1">4.8</span>
                     </div>
-                    <span className="text-xl font-extrabold text-indigo-600" data-testid={`price-${course.id}`}>
+                    <span className="text-xl font-extrabold text-primary" data-testid={`price-${course.id}`}>
                       ${course.price}
                     </span>
                   </div>

@@ -355,11 +355,11 @@ export default function CoursePlayer({ user, logout }) {
                           {passedQuizzes.has(quiz.id) ? (
                             <CheckCircle className="icon-completed" size={20} style={{ color: '#10b981' }} />
                           ) : (
-                            <HelpCircle className="icon-pending" size={20} style={{ color: '#6366f1' }} />
+                            <HelpCircle className="icon-pending" size={20} style={{ color: 'var(--primary)' }} />
                           )}
                         </div>
-                        <div className="lesson-info text-indigo-600">
-                          <div className="lesson-title font-bold">Quiz: {quiz.title}</div>
+                        <div className="lesson-info text-primary font-bold">
+                          <div className="lesson-title">Quiz: {quiz.title}</div>
                           <div className="lesson-meta">
                             <span>{quiz.questions?.length || 0} Questions</span>
                             {quiz.passed && <span className="text-green-600 ml-2">(Passed)</span>}

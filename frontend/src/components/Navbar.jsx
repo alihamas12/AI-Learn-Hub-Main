@@ -51,7 +51,7 @@ export default function Navbar({ user, logout }) {
               alt="AI LearnHub Logo"
               className="w-10 h-10 object-contain rounded-xl shadow-md group-hover:scale-110 transition-all duration-300"
             />
-            <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-primary to-blue-800 bg-clip-text text-transparent">
               AI LearnHub
             </span>
           </Link>
@@ -63,10 +63,10 @@ export default function Navbar({ user, logout }) {
                 key={link.to}
                 to={link.to}
                 data-testid={link.testId}
-                className="relative px-4 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors rounded-xl hover:bg-indigo-50 group"
+                className="relative px-4 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-xl hover:bg-blue-50 group"
               >
                 {link.label}
-                <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full" />
+                <span className="absolute bottom-1 left-4 right-4 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left rounded-full" />
               </Link>
             ))}
           </div>
@@ -78,10 +78,10 @@ export default function Navbar({ user, logout }) {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-indigo-50 border border-transparent hover:border-indigo-100 transition-all"
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-full hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all"
                     data-testid="user-menu"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm shadow-md">
                       {user.name?.charAt(0)?.toUpperCase() || 'U'}
                     </div>
                     <span className="hidden sm:block font-semibold text-slate-700 text-sm">{user.name}</span>
@@ -128,14 +128,14 @@ export default function Navbar({ user, logout }) {
                 <Button
                   data-testid="nav-login-btn"
                   variant="ghost"
-                  className="hidden sm:inline-flex rounded-xl font-semibold text-slate-600 hover:text-indigo-600 hover:bg-indigo-50"
+                  className="hidden sm:inline-flex rounded-xl font-semibold text-slate-600 hover:text-primary hover:bg-blue-50"
                   onClick={() => navigate('/login')}
                 >
                   Log In
                 </Button>
                 <Button
                   data-testid="nav-register-btn"
-                  className="btn-shine rounded-xl px-5 font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-md hover:shadow-indigo-300/50 transition-all"
+                  className="btn-shine rounded-xl px-5 font-semibold bg-primary hover:bg-blue-700 text-white shadow-md hover:shadow-blue-300/50 transition-all"
                   onClick={() => navigate('/register')}
                 >
                   Get Started
@@ -166,14 +166,12 @@ export default function Navbar({ user, logout }) {
                 {link.label}
               </Link>
             ))}
-            {!user && (
               <Button
-                className="mt-2 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 to-violet-600 text-white"
+                className="mt-2 rounded-xl font-semibold bg-primary text-white"
                 onClick={() => { navigate('/register'); setMobileOpen(false); }}
               >
                 Get Started Free
               </Button>
-            )}
           </div>
         )}
       </nav>
